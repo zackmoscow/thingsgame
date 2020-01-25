@@ -96,12 +96,13 @@ export default function Game() {
     function onDragOver(ev) {
         ev.preventDefault();
         console.log(ev)
+        //onDragOver={e=>this.onDragOver(e)}
     }
     function getPlayers() {
         if (gameState.participants) {
             const { participants } = gameState;
             return participants.map(o=> (
-                <div className="player" onDragOver={e=>this.onDragOver(e)}>
+                <div className="player" >
                     <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/>
                     <h3 className="playerName">{o.name}</h3>
                     <p className="playerScore lvl2">{o.score}</p>
