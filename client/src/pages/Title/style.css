@@ -1,0 +1,32 @@
+fieldset {
+    margin-bottom:2em;
+    position:relative;
+}
+input {
+    display:block;
+    padding:2em 1em 1em;
+    width:100%;
+}
+button {
+    display:inline-block;
+    margin:0 1em 0 0;
+}
+.titleScreen label {
+    font-size:.75em;
+    position:absolute;
+    top:1em;
+    left:1em;
+}
+.titleScreen .pwToggle {
+    display:block;
+    position:initial;
+    margin-bottom:2em;
+}
+.pwToggle [type=checkbox] {
+    display:inline-block;
+    width:initial;
+}
+.titleScreen a {
+    display:inline-block;
+    padding:1em 0;
+}
