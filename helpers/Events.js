@@ -1,0 +1,14 @@
+exports.NEW_GAME = 'newGame';
+exports.JOIN_GAME = 'joinGame';
+exports.ADDED_TO_GAME = 'addedToGame';
+exports.LEAVE_GAME = 'leaveGame';
+exports.START_ROUND = 'startRound';
+exports.SUBMITTED_PROMPT = 'submittedPrompt';
+exports.SUBMITTED_RESPONSE = 'submittedResponse';
+exports.VOTED = 'voted';
+exports.BACK_TO_LOBBY = 'backToLobby';
+exports.NO_GAME_FOUND = 'noGameFound';
+exports.GAME_IN_PROGRESS = 'gameInProgress';
+exports.NAME_ALREADY_EXISTS = 'nameAlreadyExists';
+exports.UPDATE = 'update';
+exports.NOT_ENOUGH_PLAYERS = 'notEnoughPlayers';
