@@ -4,6 +4,7 @@ import "./style.css";
 export default function Game() {
     const [gameState, setGameState] = useState([]);
     const [roundState, setRoundState] = useState([]);
+    const [dragState, setDragState] = useState([]);
     useEffect(()=> {
         setGameState({
             "gameId": 5564,
@@ -87,22 +88,39 @@ export default function Game() {
                     response: "thing 1 and thing 2"
                 },
                 {
-                    id: 5,
+                    id: 6,
                     response: "the misters"
                 }
             ]
         });
+        setDragState({});
     },[]);
     function onDragOver(ev) {
         ev.preventDefault();
-        console.log(ev)
-        //onDragOver={e=>this.onDragOver(e)}
+    }
+    function onDragStart(ev, id) {
+        console.log("dragstart: ", id);
+        ev.dataTransfer.setData("id", id);
+    }
+    function onDrop(ev) {
+        let id = ev.dataTransfer.getData("id");
+        console.log(ev.target);
+        // gameState.participants.find( o => {
+        //     if (o.id === parseInt(id)) {
+        //         return console.log("id matches! Guessed right ", id, o.id)
+        //     } else {
+        //         return console.log("id didn't match ", id, o.id);
+        //     }
+        // });
+        // setDragState({
+        //     ...dragState
+        // });
     }
     function getPlayers() {
         if (gameState.participants) {
             const { participants } = gameState;
             return participants.map(o=> (
-                <div className="player" >
+                <div className="player" key={o.id} id={o.id} onDragOver={e=>onDragOver(e)} onDrop={ e=> onDrop(e)}>
                     <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/>
                     <h3 className="playerName">{o.name}</h3>
                     <p className="playerScore lvl2">{o.score}</p>
@@ -119,7 +137,7 @@ export default function Game() {
                 [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]];
             }
             return shuffledArray.map(o=> (
-                <p className="response" draggable>{o.response}</p>
+                <p className="response" key={o.id} draggable onDragStart={e=>onDragStart(e, o.id)}>{o.response}</p>
             ));
         }
     }
