@@ -1,0 +1,9 @@
+exports.LOBBY = 'lobby';
+exports.PROMPT = 'prompt';
+exports.WAITING = 'waiting'
+exports.NORESPONSE = 'noResponse';
+exports.RESPONDED = 'responded';
+exports.INLINE = 'inline';
+exports.VOTING = 'voting';
+exports.ELIMINATED = 'eliminated';
+exports.RESULTS = 'results';
