@@ -8,7 +8,7 @@ export default function Title() {
     const [inputType, setInputType] = useState("password");
     const pwInput = useRef(null);
     const emailInput = useRef(null);
-
+  
     function setUser(val){
         const userInfo = {email: emailInput.current.value, password: pwInput.current.value};
         if(val === 'register'){
