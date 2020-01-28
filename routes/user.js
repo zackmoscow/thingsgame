@@ -32,5 +32,12 @@ Router.route('/login/:email/:password').get((req,res)=>{
       });
 });
 
+Router.route('/').put((req,res)=>{
+  const {email, wins, avatar} = req.body;
+  db.User.findOneAndUpdate({email}, {wins, avatar})
+  .then(data => res.json(data))
+  .catch(err => console.log(err));
+})
+
 
 module.exports = Router;
