@@ -1,5 +1,6 @@
 exports.LOBBY = 'lobby';
-exports.TOPIC = 'topic';
+exports.PROMPT = 'prompt';
 exports.RESPONDING = 'responding';
-exports.VOTING = 'voting';
-exports.RESULTS = 'results';
+exports.MATCHING = 'matching';
+exports.ROUND_RESULTS = 'roundResults';
+exports.FINAL_RESULTS = 'finalResults';
