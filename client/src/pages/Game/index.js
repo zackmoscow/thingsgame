@@ -97,30 +97,44 @@ export default function Game() {
     },[]);
     function onDragOver(ev) {
         ev.preventDefault();
+        let el = ev.target.parentNode.children[0];
+        el.classList.add('class', 'dragHover');
+    };
+    function onDragEnter(ev){
+        console.log(ev.target.parentNode.children)
+        
+        // getDocumentById()
+    };
+    function onDragLeave(ev) {
+        let el = ev.target.parentNode.children[0];
+        el.classList.remove('class', 'dragHover');
     }
     function onDragStart(ev, id) {
         console.log("dragstart: ", id);
         ev.dataTransfer.setData("id", id);
-    }
+    };
     function onDrop(ev) {
         let id = ev.dataTransfer.getData("id");
-        console.log(ev.target);
-        // gameState.participants.find( o => {
-        //     if (o.id === parseInt(id)) {
-        //         return console.log("id matches! Guessed right ", id, o.id)
-        //     } else {
-        //         return console.log("id didn't match ", id, o.id);
-        //     }
-        // });
-        // setDragState({
-        //     ...dragState
-        // });
+        let pId = ev.target.parentNode.id;
+        let el = ev.target.parentNode.children[0];
+        el.classList.remove('class', 'dragHover');
+        if (id === pId) {
+            console.log('match!');
+            let matched = gameState.participants.find(o => {
+                return parseInt(o.id) === parseInt(pId);
+            })
+            matched.isEliminated = true;
+            //let elminated = matched.map(o => o.isEliminated = true);
+            console.log("gs",gameState.participants);
+        }else {
+            console.log('not a match')
+        }
     }
     function getPlayers() {
         if (gameState.participants) {
             const { participants } = gameState;
             return participants.map(o=> (
-                <div className="player" key={o.id} id={o.id} onDragOver={e=>onDragOver(e)} onDrop={ e=> onDrop(e)}>
+                <div className="player" key={o.id} id={o.id} onDragOver={e=>onDragOver(e)} onDragEnter={e=>onDragEnter(e)} onDragLeave={e=>onDragLeave(e)} onDrop={ e=> onDrop(e)}>
                     <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/>
                     <h3 className="playerName">{o.name}</h3>
                     <p className="playerScore lvl2">{o.score}</p>
