@@ -47,11 +47,11 @@ export default function Title() {
         <section className="titleScreen">
             <form>
                 <fieldset>
-                    <input type="name" id="username" ref={emailInput}/>
+                    <input type="name" id="username" ref={emailInput} required/>
                     <label htmlFor="username">Email</label>
                 </fieldset>
                 <fieldset>
-                    <input type={inputType} id="password" ref={pwInput}/>
+                    <input type={inputType} id="password" ref={pwInput} required/>
                     <label htmlFor="password">Password</label>
                 </fieldset>
                 <label aria-hidden="true" className="pwToggle"><input type="checkbox" onClick={showPassword} /> Show Password</label>
