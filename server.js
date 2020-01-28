@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const userRoutes = require('./routes/user');
 const routes = require('./routes/index');
 
 const app = express();
@@ -18,10 +19,8 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/thingsgame", {
 app.use('/', routes);
 
 const Game = require('./models/game');
-const User = require('./models/user');
 
 Game.deleteMany({}, (err, res) => {});
-User.deleteMany({}, (err, res) => {});
 
 const server = app.listen(PORT, () => {
     console.log(`🌎  ==> Server now listening on PORT ${PORT}!`);
