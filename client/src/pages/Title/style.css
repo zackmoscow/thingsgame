@@ -37,3 +37,15 @@ button {
     display:inline-block;
     padding:1em 0;
 }
+
+.userAvatar {
+    width: 200px;
+}
+
+#signout {
+    padding:1em 2em;
+    position: fixed;
+    bottom:1em;
+    left:50%;
+    transform:translateX(-50%);
+}
