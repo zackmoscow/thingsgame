@@ -22,11 +22,26 @@ const UserSchema = new Schema({
     required: true
   },
   wins: {
-    type: Number
+    type: Number,
+    default: 0,
   },
-  avatar: { 
-      type: String
-  }
+  gameID: String,
+  state: String,
+  response: String,
+  promptMaster: {
+    type: Boolean,
+    default: false
+  },
+  currentScore: {
+    type: Number,
+    default: 0
+  },
+  gameWinner: {
+    type: Boolean,
+    default: false
+  },
+  socketID: String,
+  avatar: String,
 });
 
 // UserSchema.pre("save", function(callback) {
