@@ -11,6 +11,5 @@ exports.MATCHED = 'matched';
 exports.NOT_ENOUGH_USERS = 'notEnoughUsers';
 exports.NO_GAME_FOUND = 'noGameFound';
 exports.GAME_IN_PROGRESS = 'gameInProgress';
-exports.NAME_ALREADY_EXISTS = 'nameAlreadyExists';
 exports.UPDATE = 'update';
 exports.ERROR = 'backendError';
