@@ -2,20 +2,15 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const gameSchema = new Schema({
-    participant: {
-        type: String,
-        score: Number,
-        avatar: String,
-        position: Number,
-        eliminated: Boolean
-    },
-    round: {
-        question: String,
-        response: Array,
-            
-
-    }
- 
+    gameID: String,
+    gameState: String,
+    promptMaster: String,
+    prompt: String,
+    round: Number,
+    users: Number,
+    currentTurn: Number,
+    allUsers: Array,
+    hasWent: Array,
 });
 
 const Game = mongoose.model("Game", gameSchema);

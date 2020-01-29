@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-//const bcrypt = require("bcrypt-nodejs");
+//const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema({
   userName: {
     type: String,
-    required: true,
+    required: false,
   },
   email: {
     type: String,
@@ -22,11 +22,26 @@ const UserSchema = new Schema({
     required: true
   },
   wins: {
-    type: Number
+    type: Number,
+    default: 0,
   },
-  avatar: { 
-      type: String
-  }
+  gameID: String,
+  state: String,
+  response: String,
+  promptMaster: {
+    type: Boolean,
+    default: false
+  },
+  currentScore: {
+    type: Number,
+    default: 0
+  },
+  gameWinner: {
+    type: Boolean,
+    default: false
+  },
+  socketID: String,
+  avatar: String,
 });
 
 // UserSchema.pre("save", function(callback) {
@@ -37,7 +52,7 @@ const UserSchema = new Schema({
     
 //     bcrypt.genSalt(5, function(err, salt) {
 //       if (err) return callback(err);
-  
+      
 //       bcrypt.hash(user.password, salt, null, function(err, hash) {
 //         if (err) return callback(err);
 //         user.password = hash;

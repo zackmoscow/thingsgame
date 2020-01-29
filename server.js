@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const userRoutes = require('./routes/user');
+const routes = require('./routes/index');
 
 const app = express();
-const port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -14,13 +16,13 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/thingsgame", {
     useFindAndModify: false
 });
 
+app.use('/', routes);
+
 const Game = require('./models/game');
-const User = require('./models/user');
 
 Game.deleteMany({}, (err, res) => {});
-User.deleteMany({}, (err, res) => {});
 
-const server = app.listen(port, () => {
+const server = app.listen(PORT, () => {
     console.log(`🌎  ==> Server now listening on PORT ${PORT}!`);
 
     const io = require('socket.io')(server);

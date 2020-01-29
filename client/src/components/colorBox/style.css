@@ -1,0 +1,26 @@
+.colorBox {
+    position:fixed;
+    bottom:0;
+    left:0;
+    z-index:2;
+}
+.color {
+    float:left;
+    height:5em;
+    width:5em;
+}
+.color1 {
+    background:#f8e9a1;
+}
+.color2 {
+    background: #f76c6c;
+}
+.color3 {
+    background: #a8d0e6;
+}
+.color4 {
+    background: #374785;
+}
+.color5 {
+    background: #24305e;
+}
