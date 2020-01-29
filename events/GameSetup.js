@@ -39,7 +39,7 @@ function createGame(socket, io) {
     return;
   }
 
-  socket.on(Events.NEW_GAME, () => {
+  socket.on(Events.NEW_GAME, (userName) => {
     let gameID = generateGameID();
 
     Game.findOne({ gameID: gameID }, (err, game) => {
@@ -85,7 +85,7 @@ function createGame(socket, io) {
   });
 
 // Add other users into the game
-  socket.on(Events.JOIN_GAME, (gameID) => {
+  socket.on(Events.JOIN_GAME, (gameID, userName) => {
 
     Game.findOne({ gameID: gameID }, (err, game) => {
       if (err) {

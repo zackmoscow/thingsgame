@@ -1,4 +1,5 @@
-// NOTE: We will need to link setGameInfo and setPlayerInfo "actions"
+import io from 'socket.io-client';
+import { setGameInfo, setUserInfo } from '../actions/actions'
 
 export let socket = null;
 
@@ -14,9 +15,9 @@ export function connectToServer(dispatch) {
     console.log('Failed to connect');
   });
 
-  socket.on('update', (gameInfo, playerInfo) => {
+  socket.on('update', (gameInfo, userInfo) => {
     dispatch(setGameInfo(gameInfo));
-    dispatch(setPlayerInfo(playerInfo));
+    dispatch(setUserInfo(userInfo));
   });
 
   socket.on('backendError', (err) => {
