@@ -18,7 +18,7 @@ export default function Title() {
         };
         if(val === 'register'){
             console.log('you clicked register')
-            Axios.post('/user/register', userInfo)
+            Axios.post('/user/signup', userInfo)
             .then(function (response) {
                 console.log(response);
             })
@@ -27,13 +27,9 @@ export default function Title() {
             });
         } else if (val === 'login'){
             console.log('you clicked login')
-            Axios.get(`/user/login/${userInfo.email}/${userInfo.password}`)
+            Axios.post('/user/login', userInfo)
             .then(function (response) {
-                if(response.status === 200){
-                    changeEmail(userInfo.email);
-                } else {
-                    console.log('you blew it')
-                }
+                changeEmail(userInfo.email);
             })
             .catch(function (error) {
                 console.log(error);
