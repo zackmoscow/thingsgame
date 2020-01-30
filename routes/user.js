@@ -2,6 +2,7 @@ const router = require("express").Router();
 const isAuthenticated = require("../config/isAuthenticated");
 const auth = require("../config/auth");
 const usersController = require("../controllers/usersController");
+const db = require('../models');
 
 // LOGIN ROUTE
 router.route("/login").post((req, res) => {
@@ -29,6 +30,13 @@ router.route("/:id").get(isAuthenticated, (req, res) => {
     })
     .catch(err => res.status(400).send(err));
 });
+
+router.route('/:id').put(isAuthenticated, (req,res)=>{
+  const {id, wins, avatar} = req.body;
+  db.User.findOneAndUpdate({id}, {wins, avatar})
+  .then(data => res.json(data))
+  .catch(err => console.log(err));
+})
 
 module.exports = router;
 

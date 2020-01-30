@@ -2,10 +2,14 @@ const exjwt = require("express-jwt");
 require("dotenv").config();
 // Init the express-jwt middleware
 
-console.log(process.env.SERVER_SECRET);
+function isAuthenticated(req, res, next) {
+  const token = req.header('x-auth-token');
 
-const isAuthenticated = exjwt({
-  secret: process.env.SERVER_SECRET
-});
+  // Check for token
+  if (!token)
+    return res.status(401).json({ msg: 'No token, authorizaton denied' });
+
+  next();
+}
 
 module.exports = isAuthenticated;
