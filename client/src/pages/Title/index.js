@@ -5,7 +5,7 @@ import {UserContext} from '../../utils/UserContext';
 import SelectAvatar from '../../components/SelectAvatar';
 
 export default function Title() {
-    const {userEmail, userWins, userAvatar, changeEmail, changeAvatar} = useContext(UserContext);
+    const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated, getUser} = useContext(UserContext);
     const [inputType, setInputType] = useState("password");
     const pwInput = useRef(null);
     const emailInput = useRef(null);
@@ -13,27 +13,24 @@ export default function Title() {
     function setUser(val){
         const userInfo = {
             email: emailInput.current.value,
-            userName: emailInput.current.value, 
+            userName: emailInput.current.value.substring(0, emailInput.current.value.indexOf('@')), 
             password: pwInput.current.value
         };
         if(val === 'register'){
             console.log('you clicked register')
-            Axios.post('/user/register', userInfo)
-            .then(function (response) {
-                console.log(response);
+            Axios.post('/user/signup', userInfo)
+            .then(function (response){
+                console.log('you did it');
             })
             .catch(function (error) {
                 console.log(error);
             });
         } else if (val === 'login'){
-            console.log('you clicked login')
-            Axios.get(`/user/login/${userInfo.email}/${userInfo.password}`)
+            Axios.post('/user/login', userInfo)
             .then(function (response) {
-                if(response.status === 200){
-                    changeEmail(userInfo.email);
-                } else {
-                    console.log('you blew it')
-                }
+                // changeToken(response.data.token);
+                // changeUserId(response.data.user._id);
+                changeAuthenticated(response.data.token, response.data.user._id);
             })
             .catch(function (error) {
                 console.log(error);
@@ -49,24 +46,25 @@ export default function Title() {
     }
 
     function isLoggedIn(){
-        if(userEmail !== ''){
+        if(isAuthenticated){
             return(
                 <div>
-                    <h1>Welcome, {userEmail}!</h1>
+                    <h1>Welcome, {userName}!</h1>
                     <p>You've won {userWins} games.</p>
                     <img className="userAvatar" src={userAvatar} />
                     <div>
                     {showAvatars()}
                     </div>
-                    <button id="signout" onClick={() => changeEmail('')}>Not You? Switch Users</button>
-                    
+
+                    <button id="signout" onClick={() => changeAuthenticated('', '')}>Not You? Switch Users</button>
+                    <a id="join" href="/game">Join Game</a>
                 </div>
                 )
         }
     }
 
     function showForm(){
-        if(userEmail === ''){
+        if(!isAuthenticated){
             return (
             <div>
                 <form>

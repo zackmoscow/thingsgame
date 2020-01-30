@@ -100,7 +100,7 @@ function match(socket, io) {
                   }  
                   User.updateMany({ gameID: gameID }, { state: UserStates.RESULTS }, (err, res) => {
                     if (err) {
-                      socket.emit(OutboundEvents.BACKEND_ERROR, err);
+                      socket.emit(OutboundEvents.ERROR, err);
                       return;
                     }
                     matchTurn.allUsers = [];

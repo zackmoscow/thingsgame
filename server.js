@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 const routes = require('./routes/index');
+require('dotenv').config;
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,6 +18,16 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/thingsgame", {
 });
 
 app.use('/', routes);
+
+// // Error handling
+// app.use(function(err, req, res, next) {
+//     if (err.name === "UnauthorizedError") {
+//         // Send the error rather than to show it on the console
+//         res.status(401).send(err);
+//     } else {
+//         next(err);
+//     }
+// });
 
 const Game = require('./models/game');
 
