@@ -9,6 +9,9 @@
     position: relative;
     width:48%;
 }
+.eliminated {
+    opacity:25%;
+}
 .playerAvatar {
     border-radius:50%;
     width:100%;
