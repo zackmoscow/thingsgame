@@ -7,6 +7,7 @@ function SelectAvatar(props){
       className="SelectAvatar-avatarOption" 
       onClick={()=>props.onClick(props.imgPath)} 
       src={props.imgPath}
+      alt={`Select avatar ${props.imgPath.substring(props.imgPath.lastIndexOf('/')+1, props.imgPath.indexOf('.'))}`}
     />
   )
 };

@@ -7,6 +7,8 @@ import SelectAvatar from '../../components/SelectAvatar';
 export default function Title() {
     const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated, getUser} = useContext(UserContext);
     const [inputType, setInputType] = useState("password");
+    const [loginError, setLoginError] = useState(null);
+    const [signupError, setSignupError] = useState(null);
     const pwInput = useRef(null);
     const emailInput = useRef(null);
   
@@ -20,10 +22,11 @@ export default function Title() {
             console.log('you clicked register')
             Axios.post('/user/signup', userInfo)
             .then(function (response){
-                console.log('you did it');
+                console.log('success!')
+                setSignupError('Success! You can now click "Log In" with those credentials.')
             })
             .catch(function (error) {
-                console.log(error);
+                setSignupError('User already exists with that email.')
             });
         } else if (val === 'login'){
             Axios.post('/user/login', userInfo)
@@ -34,6 +37,7 @@ export default function Title() {
             })
             .catch(function (error) {
                 console.log(error);
+                setLoginError('We found no user with those credentials.')
             });
         }
     }
@@ -66,13 +70,30 @@ export default function Title() {
         if(!isAuthenticated){
             return (
             <div>
+                <div id="errors">
+                {loginError || signupError}
+                </div>
                 <form>
                     <fieldset>
-                        <input type="name" id="username" ref={emailInput} required/>
+                        <input type="name" 
+                        onChange={()=>{
+                            setLoginError(null) 
+                            setSignupError(null)
+                            }} 
+                        id="username" 
+                        ref={emailInput} 
+                        required/>
                         <label htmlFor="username">Email</label>
                     </fieldset>
                     <fieldset>
-                        <input type={inputType} id="password" ref={pwInput} required/>
+                        <input type={inputType} 
+                        onChange={()=>{
+                            setLoginError(null) 
+                            setSignupError(null)
+                            }} 
+                        id="password" 
+                        ref={pwInput} 
+                        required/>
                         <label htmlFor="password">Password</label>
                     </fieldset>
                     <label aria-hidden="true" className="pwToggle"><input type="checkbox" onClick={showPassword} /> Show Password</label>
