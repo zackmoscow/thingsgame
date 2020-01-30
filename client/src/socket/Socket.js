@@ -4,7 +4,7 @@ import { setGameInfo, setUserInfo } from '../actions/actions'
 export let socket = null;
 
 export function connectToServer(dispatch) {
-  socket = io('ThisIsWhereOurDeployedURLGoes', { reconnection: false });
+  socket = io('localhost:3000', { reconnection: false });
 
   socket.on('connect', () => {
     console.log('Socket connected');
@@ -23,5 +23,4 @@ export function connectToServer(dispatch) {
   socket.on('backendError', (err) => {
     console.log(err);
   });
-
 }
