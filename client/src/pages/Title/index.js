@@ -72,7 +72,7 @@ export default function Title() {
             return(
                 <div>
                     <h1>Welcome, {userName}!</h1>
-                    {turnUserInfoIntoArray().map(user => <p>You've won {user.wins} games.</p>)}
+                    <p>You've won {userWins} games!</p>
                     <p>Current game: {gameInfo.gameID} </p>
                     <img className="userAvatar" src={userAvatar} />
                     <div>
