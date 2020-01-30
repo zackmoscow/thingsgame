@@ -17,6 +17,7 @@ exports.getGameInfo = (gameID, cb) => {
       gameID: gameID,
       gameState: game.gameState,
       prompt: game.prompt,
+      promptMaster: game.promptMaster,
       round: game.round
     };
     cb(gameInfo);
