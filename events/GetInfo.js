@@ -43,7 +43,6 @@ exports.getUserInfo = (gameID, cb) => {
           state: user.state,
           response: user.response,
           currentScore: user.currentScore,
-          avatar: user.avatar,
           turn: user.turn,
           wins: user.wins
         };
