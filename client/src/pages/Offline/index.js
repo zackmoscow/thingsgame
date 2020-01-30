@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./style.css";
 //import OpenSocket from "socket.io-client";
 
-export default function Game() {
+export default function OfflineGame() {
     const [gameState, setGameState] = useState({});
     const [roundState, setRoundState] = useState({
         round: 0,
