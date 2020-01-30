@@ -58,6 +58,7 @@ function createGame(socket, io) {
           gameID: gameID,
           gameState: GameStates.LOBBY,
           prompt: '',
+          promptMaster: userName,
           round: 1,
           users: 1,
           currentTurn: 1
