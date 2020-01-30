@@ -1,4 +1,4 @@
-import { socket, connectToServer } from '../../socket/GameSocket';
+import { socket, connectToServer } from '../socket/Socket';
 
 export function setGameInfo(gameInfo) {
   return { type: 'gameInfo', payload: gameInfo }
@@ -14,39 +14,39 @@ export function setError(error) {
 
 export function newGame(userName) {
   return (dispatch) => {
-    if (socket == null) {
-      connectToServer(dispatch);
-    }
-
-    if (socket != null) {
+     
+    connectToServer(dispatch);
+    
       socket.emit('newGame', userName);
 
       socket.on('addedToGame', (gameInfo, userInfo) => {
+        console.log(gameInfo);
         dispatch(setGameInfo(gameInfo));
         dispatch(setUserInfo(userInfo));
         dispatch(setError(''));
+        console.log("creating game");
       });
 
       socket.on('backendError', data => {
         dispatch(setError('Error with gameID'));
       });
-    }
+    
   }
 }
 
 export function joinGame(gameID, userName) {
   return (dispatch) => {
-    if (socket == null) {
-      connectToServer(dispatch);
-    }
 
-    if (socket != null) {
+    connectToServer(dispatch);
+    
       socket.emit('joinGame', gameID, userName);
 
       socket.on('addedToGame', (gameInfo, userInfo) => {
         dispatch(setGameInfo(gameInfo));
         dispatch(setUserInfo(userInfo));
         dispatch(setError(''));
+        console.log('added to game');
+        console.log(gameInfo, userInfo);
       });
 
       socket.on('noGameFound', data => {
@@ -56,7 +56,7 @@ export function joinGame(gameID, userName) {
       socket.on('gameInProgress', data => {
         dispatch(setError('Game is already in progress'));
       });
-    }
+    
   }
 }
 

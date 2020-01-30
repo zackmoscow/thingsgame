@@ -99,5 +99,5 @@ function nextRound(socket, io) {
   })
 }
 
-modules.export = nextRound;
+module.exports = nextRound;
 

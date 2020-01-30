@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const userRoutes = require('./routes/user');
+// const userRoutes = require('./routes/user');
 const routes = require('./routes/index');
 require('dotenv').config;
 
@@ -39,13 +39,16 @@ const server = app.listen(PORT, () => {
     const io = require('socket.io')(server);
 
     io.on('connection', (socket) => {
+
         try {
+            require('./events/GameEnd')(socket, io);
             require('./events/GameSetup')(socket, io);
             require('./events/GameStart')(socket, io);
-            require('./events/SubmitPrompt')(socket, io);
+            require('./events/GetInfo')(socket, io);
+            require('./events/Match')(socket, io);
+            require('./events/NextRound')(socket, io);
             require('./events/Response')(socket, io);
-            require('./events/Vote')(socket, io);
-            require('./events/EndRound')(socket, io);
+            require('./events/SubmitPrompt')(socket, io);           
         }
         catch (err) {
             console.log("Server error: " + err);

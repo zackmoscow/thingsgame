@@ -7,6 +7,8 @@ const Info = require('./GetInfo');
 
 function gameEnd(socket, io) {
 
+  console.log('here is module', socket, io);
+
   socket.on(Events.GAME_END, (gameID) => {
     User.findOneAndUpdate({ gameID: gameID, currentScore: { $max } }, { wins: (wins + 1), gameWinner: true}, (err, user) => {
       if (err) {
@@ -34,5 +36,5 @@ function gameEnd(socket, io) {
   })
 }
 
-modules.export = gameEnd;
+module.exports = gameEnd;
 

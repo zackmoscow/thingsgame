@@ -3,12 +3,29 @@ import "./style.css";
 import Axios from "axios";
 import {UserContext} from '../../utils/UserContext';
 import SelectAvatar from '../../components/SelectAvatar';
+import { useDispatch, useSelector } from 'react-redux';
+import { newGame, joinGame, setError } from '../../actions/actions';
 
 export default function Title() {
     const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated, getUser} = useContext(UserContext);
     const [inputType, setInputType] = useState("password");
     const pwInput = useRef(null);
     const emailInput = useRef(null);
+    const [gameIDInput, setGameIDInput] = useState('');
+    const dispatch = useDispatch();
+    const gameInfo = useSelector(state => state.gameInfo);
+    const userInfo = useSelector(state => state.userInfo);
+    
+    function turnUserInfoIntoArray() {
+        let users = [];
+        for (let key in userInfo) {
+            users.push({
+                userName: key,
+                ...userInfo[key]
+            })
+        }
+        return users;
+    }
   
     function setUser(val){
         const userInfo = {
@@ -47,18 +64,28 @@ export default function Title() {
 
     function isLoggedIn(){
         if(isAuthenticated){
+            
             return(
                 <div>
                     <h1>Welcome, {userName}!</h1>
-                    <p>You've won {userWins} games.</p>
+                    {turnUserInfoIntoArray().map(user => <p>You've won {user.wins} games.</p>)}
+                    <p>Current game: {gameInfo.gameID} </p>
                     <img className="userAvatar" src={userAvatar} />
                     <div>
                     {showAvatars()}
                     </div>
 
                     <button id="signout" onClick={() => changeAuthenticated('', '')}>Not You? Switch Users</button>
-                    <a id="createOnlineGame" href="/onlinegame">Create Game</a>
-                    <a id="joinOnlineGame" href="/onlinegame">Join Game</a>
+                    {/* <a id="createOnlineGame" href="/onlinegame">Create Game</a>
+                    <a id="joinOnlineGame" href="/onlinegame">Join Game</a> */}
+                    <button id="createOnlineGame" onClick={(e)=>newOnlineGame(e)}>Create New Game</button>
+                    <form>
+                      <fieldset>
+                        <input type='input' value={gameIDInput} onChange={gameIDChange}/>
+                        <label htmlFor="joinGameID">GameID</label>
+                      </fieldset>
+                    </form>
+                    <button id="joinOnlineGame" onClick={(e)=>joinOnlineGame(e)}>Join Existing Game</button>
                 </div>
                 )
         }
@@ -93,7 +120,30 @@ export default function Title() {
         } else {
             setInputType("password");
         }
-      }
+    }
+
+    function newOnlineGame(e) {
+        e.preventDefault();
+        console.log(userName);
+        dispatch(newGame(userName));
+        window.location.assign('localhost:3000/onlinegame')
+    }
+
+    function joinOnlineGame(e) {
+        e.preventDefault();
+        console.log(gameIDInput);
+        if (gameIDInput !== '') {
+            dispatch(joinGame(gameIDInput, userName));
+            window.location.assign('localhost:3000/onlinegame')
+        }
+        else {
+            dispatch(setError('Game code can not be blank'));
+        }
+    }
+
+    function gameIDChange(e) {
+        setGameIDInput(e.target.value);
+    }
 
     return (
         <section className="titleScreen">
