@@ -59,7 +59,7 @@ export default function Title() {
                     {showAvatars()}
                     </div>
                     <button id="signout" onClick={() => changeEmail('')}>Not You? Switch Users</button>
-                    <a id="join" href="/game">Join Game</a>
+                    
                 </div>
                 )
         }
@@ -100,6 +100,7 @@ export default function Title() {
         <section className="titleScreen">
             {isLoggedIn()}
             {showForm()}
+            <a id="join" href="/game">Join Game</a>
         </section>
     )
 }
