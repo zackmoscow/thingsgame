@@ -13,6 +13,7 @@ const Info = require('./GetInfo');
 
 function createGame(socket, io) {
 
+
   function generateGameID() {
     const characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let gameID = '';
@@ -40,6 +41,9 @@ function createGame(socket, io) {
   }
 
   socket.on(Events.NEW_GAME, (userName) => {
+
+    console.log('userName');
+
     let gameID = generateGameID();
 
     Game.findOne({ gameID: gameID }, (err, game) => {
@@ -72,7 +76,7 @@ function createGame(socket, io) {
             Info.getGameInfo(gameID, (gameInfo) => {
               Info.getUserInfo(gameID, (userInfo) => {
                   socket.emit(Events.ADDED_TO_GAME, gameInfo, userInfo);
-                  socket.to(gameID).emit(Events.UPDATE, userInfo);
+                  io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
               });
             });
         });
@@ -122,10 +126,9 @@ function createGame(socket, io) {
       })
     })
   });
-
 }
 
-modules.export = createGame;
+module.exports = createGame;
 
 // Send game code to other potential users?
 

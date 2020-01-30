@@ -39,6 +39,7 @@ exports.getUserInfo = (gameID, cb) => {
     User.find({ gameID: gameID }, (err, users) => {
       users.forEach((user) => {
         userInfo[user.userName] = {
+          gameID: user.gameID,
           state: user.state,
           response: user.response,
           currentScore: user.currentScore,
