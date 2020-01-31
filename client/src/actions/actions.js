@@ -12,12 +12,12 @@ export function setError(error) {
   return { type: 'error', payload: error }
 }
 
-export function newGame(userName) {
+export function newGame(userName, userAvatar) {
   return (dispatch) => {
      
     connectToServer(dispatch);
     
-      socket.emit('newGame', userName);
+      socket.emit('newGame', userName, userAvatar);
 
       socket.on('addedToGame', (gameInfo, userInfo) => {
         console.log(gameInfo);
@@ -34,7 +34,7 @@ export function newGame(userName) {
   }
 }
 
-export function joinGame(gameID, userName) {
+export function joinGame(gameID, userName, userAvatar) {
   return (dispatch) => {
 
     connectToServer(dispatch);
