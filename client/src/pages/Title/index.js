@@ -66,6 +66,31 @@ export default function Title() {
         })
     }
 
+    function copyGameID(){
+        var copyText = document.querySelector('#gameID');
+        copyText.select();
+        copyText.setSelectionRange(0, 99999)
+        document.execCommand('copy');
+        alert(`Copied game id ${copyText.value} to your clipboard. Invite your friends!`)
+    }
+
+    function copyBtn(){
+        if(gameInfo.gameID){
+            return (
+            <div>
+                <input id="gameID" value={gameInfo.gameID} readOnly></input>
+                <button onClick={()=>copyGameID()}>Copy to clipboard</button>
+            </div>
+            )
+        }
+    }
+
+    function enterBtn(){
+        if(gameInfo.gameID){
+            return <a href="/onlineGame"><button>Enter Game</button></a>
+        }
+    }
+
     function isLoggedIn(){
         if(isAuthenticated){
             
@@ -73,7 +98,8 @@ export default function Title() {
                 <div>
                     <h1>Welcome, {userName}!</h1>
                     {turnUserInfoIntoArray().map(user => <p>You've won {user.wins} games.</p>)}
-                    <p>Current game: {gameInfo.gameID} </p>
+                    <p>Current game:</p>
+                    {copyBtn()}
                     <img className="userAvatar" src={userAvatar} />
                     <div>
                     {showAvatars()}
@@ -90,6 +116,7 @@ export default function Title() {
                       </fieldset>
                     </form>
                     <button id="joinOnlineGame" onClick={(e)=>joinOnlineGame(e)}>Join Existing Game</button>
+                    {enterBtn()}
                 </div>
                 )
         }
