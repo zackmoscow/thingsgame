@@ -231,32 +231,32 @@ export default function OfflineGame() {
             })
         }
     }
-    function player(o) {
-        let playerClass = "player";
-        let dragEvents = {
-            onDragOver:  e => onDragOver(e),
-            onDragEnter: e => onDragEnter(e),
-            onDragLeave: e => onDragLeave(e),
-            onDrop: e=> onDrop(e)
-        }
-        if (o.isEliminated || o.promptmaster) {
-            playerClass = "player eliminated";
-            dragEvents = {};
-        }
-        return(
-            <div className={playerClass} key={o.id} id={o.name} {...dragEvents}>
-                <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/>
-                <h3 className="playerName">{o.name}</h3>
-                <p className="playerScore lvl2">{o.score}</p>
-            </div>
-        )
-    }
+    // function player(o) {
+    //     let playerClass = "player";
+    //     let dragEvents = {
+    //         onDragOver:  e => onDragOver(e),
+    //         onDragEnter: e => onDragEnter(e),
+    //         onDragLeave: e => onDragLeave(e),
+    //         onDrop: e=> onDrop(e)
+    //     }
+    //     if (o.isEliminated || o.promptmaster) {
+    //         playerClass = "player eliminated";
+    //         dragEvents = {};
+    //     }
+    //     return(
+    //         <div className={playerClass} key={o.id} id={o.name} {...dragEvents}>
+    //             <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/>
+    //             <h3 className="playerName">{o.name}</h3>
+    //             <p className="playerScore lvl2">{o.score}</p>
+    //         </div>
+    //     )
+    // }
 
-    function getPlayers() {
-        if (gameState.participants) {
-            return gameState.participants.map(player);
-        }
-    }
+    // function getPlayers() {
+    //     if (gameState.participants) {
+    //         return gameState.participants.map(player);
+    //     }
+    // }
     function getAnswers() {
         //roundState && roundState.responses
         if (gameState.participants) {
@@ -287,7 +287,8 @@ export default function OfflineGame() {
                     {getAnswers()}
                 </div>
                 <div className="playerArea">
-                    {getPlayers()}
+                    {/* {getPlayers()} */}
+                    <Players {...gameState} />
                 </div>
                 {/* <ActionBtns /> */}
                 <div className="actions">
