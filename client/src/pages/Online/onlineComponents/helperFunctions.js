@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux';
 export function turnUserInfoIntoArray() {
     const userInfo = useSelector(state => state.userInfo);
     let users = [];
-    for (let key in userInfo) {
-        users.push({
-            userName: key,
-            ...userInfo[key]
-        })
-    }
+    // for (let key in userInfo) {
+    //     users.push({
+    //         userName: key,
+    //         ...userInfo[key]
+    //     })
+    // }
     return users;
 }
 
