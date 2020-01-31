@@ -41,10 +41,7 @@ const UserSchema = new Schema({
     default: false
   },
   socketID: String,
-  avatar: {
-    type: String,
-    default: 'client/public/images/avatars/man1.svg'
-  }
+  avatar: String
 });
 
 UserSchema.pre("save", function(callback) {

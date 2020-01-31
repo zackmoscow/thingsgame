@@ -133,7 +133,7 @@ export default function Title() {
     function newOnlineGame(e) {
         e.preventDefault();
         console.log(userName);
-        dispatch(newGame(userName));
+        dispatch(newGame(userName, userAvatar));
         window.location.assign('localhost:3000/onlinegame')
     }
 
@@ -141,7 +141,7 @@ export default function Title() {
         e.preventDefault();
         console.log(gameIDInput);
         if (gameIDInput !== '') {
-            dispatch(joinGame(gameIDInput, userName));
+            dispatch(joinGame(gameIDInput, userName, userAvatar));
             window.location.assign('localhost:3000/onlinegame')
         }
         else {

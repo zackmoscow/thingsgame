@@ -25,7 +25,7 @@ function createGame(socket, io) {
     return gameID;
   }
 
-  function addUserToGame(userName, gameID, promptMaster) {
+  function addUserToGame(userName, gameID, promptMaster, userAvatar) {
     User.updateOne({userName : userName}, {
       gameID: gameID, 
       state: UserStates.LOBBY, 
@@ -33,6 +33,7 @@ function createGame(socket, io) {
       currentScore: 0,
       gameWinner: false,
       response: '',
+      avatar: userAvatar
     })
     .catch((err) => {
       socket.emit(Events.ERROR, err);
@@ -40,7 +41,7 @@ function createGame(socket, io) {
     return;
   }
 
-  socket.on(Events.NEW_GAME, (userName) => {
+  socket.on(Events.NEW_GAME, (userName, userAvatar) => {
 
     console.log('userName');
 
@@ -69,7 +70,7 @@ function createGame(socket, io) {
             socket.emit(Events.ERROR, err);
             return;
           }
-          addUserToGame(userName, gameID, true); 
+          addUserToGame(userName, gameID, true, userAvatar); 
             
             console.log('Adding user to game');
             socket.join(gameID);
@@ -90,7 +91,7 @@ function createGame(socket, io) {
   });
 
 // Add other users into the game
-  socket.on(Events.JOIN_GAME, (gameID, userName) => {
+  socket.on(Events.JOIN_GAME, (gameID, userName, userAvatar) => {
 
     Game.findOne({ gameID: gameID }, (err, game) => {
       if (err) {
@@ -114,7 +115,7 @@ function createGame(socket, io) {
           return;
         }
 
-        addUserToGame(userName, gameID, false);
+        addUserToGame(userName, gameID, false, userAvatar);
           console.log('Adding user to game');
           socket.join(gameID);
 
