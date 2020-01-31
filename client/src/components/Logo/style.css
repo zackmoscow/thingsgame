@@ -1,0 +1,15 @@
+.logo {
+    color: #f8e9a1;
+    line-height: 1;
+    font-size: 5em;
+    font-family: 'Sigmar One', cursive;
+    font-weight: 400;
+    margin-bottom:.25em;
+}
+.logo span {
+    color: #a8d0e6;
+    font-size: .25em;
+    display: block;
+    font-family: 'Maiden Orange', cursive;
+    line-height: .5;
+}

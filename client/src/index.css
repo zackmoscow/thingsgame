@@ -1,9 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Caveat|Charmonman|Courgette|Maiden+Orange|Sigmar+One|Sriracha&display=swap');
 *, *:before, *:after { margin:0; padding:0; box-sizing:border-box; 
     transition: all 250ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
     transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
 }
 body {
-    background: linear-gradient(#24305e7d, #24305e7d), url(images/bg.jpg);
+    background: linear-gradient(#24305e7d, #24305e7d), url(assets/bg.jpg);
     background-repeat: repeat;
     color:#fff;
     font-family:Arial, Helvetica, sans-serif;
@@ -13,10 +14,10 @@ body {
 button, input, textarea, label {
     font:inherit;
 }
-button, input, textarea {
+button, input, textarea, #offlineGameInit {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
-button:hover, button:focus, input:focus {
+button:hover, button:focus, input:focus, #offlineGameInit:hover {
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 fieldset {
@@ -42,6 +43,13 @@ input:-webkit-autofill:active {
     -webkit-text-fill-color: white !important;
     outline:none;
     transition-delay:999s;
+}
+.submitOr {
+    border-top:1px solid;
+    border-bottom:1px solid;
+    font-family: 'Sriracha', cursive;
+    margin: 0 1em;
+    text-transform: uppercase;
 }
 .lvl1 {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);

@@ -6,6 +6,7 @@ import {UserContext} from '../../utils/UserContext';
 import SelectAvatar from '../../components/SelectAvatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { newGame, joinGame, setError } from '../../actions/actions';
+import Logo from "../../components/Logo";
 
 export default function Title() {
     const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated, getUser} = useContext(UserContext);
@@ -88,7 +89,7 @@ export default function Title() {
         if(isAuthenticated){
             
             return(
-                <div>
+                <div className="loginFormDiv">
                     <h1>Welcome, {userName}!</h1>
                     <p>Current game:</p>
                     {copyBtn()}
@@ -118,7 +119,7 @@ export default function Title() {
     function showForm(){
         if(!isAuthenticated){
             return (
-            <div>
+            <div className="loginFormDiv">
                 <div id="errors">
                 {loginError || signupError}
                 </div>
@@ -139,7 +140,7 @@ export default function Title() {
                         onChange={()=>{
                             setLoginError(null) 
                             setSignupError(null)
-                            }} 
+                            }}
                         id="password" 
                         ref={pwInput} 
                         required/>
@@ -189,10 +190,16 @@ export default function Title() {
 
     return (
         <section className="titleScreen">
+            <Logo />
             {isLoggedIn()}
             {showForm()}
+
+            <div className="localGameBtn">
+                <span className="submitOr">or</span><br />
+                <a id="offlineGameInit" href="/offlinegame">Start Local Game</a>
+                <a id="avatarCustomization" href="/avatar">Customize Avatar</a>
+            </div>
             {redirect && <Redirect to="/onlineGame" />}
-            <a id="offlineGameInit" href="/offlinegame">Start Local Game</a>
         </section>
     )
 }

@@ -16,12 +16,20 @@ button {
     display:inline-block;
     margin:0 1em 0 0;
 }
-#loginSubmit, #signup {
+.loginFormDiv {
+    margin-bottom:2em;
+}
+#loginSubmit, #signup, #offlineGameInit {
     background: #f76c6c;
     border: none;
     color: #000;
     font-weight: 700;
     padding: 1em 2em;
+}
+#offlineGameInit {
+    background: #a8d0e6;
+    margin-top:2em;
+    text-decoration:none;
 }
 #signup {
     background: #f8e9a1;
@@ -49,7 +57,6 @@ button {
 .userAvatar {
     width: 200px;
 }
-
 #signout {
     padding:1em 2em;
     position: fixed;
