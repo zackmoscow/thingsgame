@@ -7,8 +7,13 @@ import ActionBtns from "../../components/ActionBtns";
 
 export default function OfflineGame() {
     const [input, setInput] = useState('');
+    const [avatar, setAvatar] = useState('');
     const [participantName, setParticipantName] = useState('');
-    const [gameState, setGameState] = useState({});
+    const [gameState, setGameState] = useState({
+        gameId: null,
+        isReady: false,
+        participants: []
+    });
     const [roundState, setRoundState] = useState({
         round: 1,
         promptmaster: {},
@@ -20,6 +25,7 @@ export default function OfflineGame() {
     useEffect(()=> {
         setGameState({
             gameId: 5564,
+            isReady: false,
             participants: [
                 // {
                 //     id: 1,
@@ -99,8 +105,8 @@ export default function OfflineGame() {
         const enteredParticipants = [...participants];
         let newParticipant = {
             name: input, 
-            avatar: "images/avatars/woman1.svg",
-            score: 0, 
+            avatar: avatar,
+            score: 0,
             position: 0,
             response:"",
             isEliminated: false,
@@ -115,7 +121,15 @@ export default function OfflineGame() {
         console.log(gameState);
     }
     function startGame(){
-        console.log('start game')
+        console.log('start game');
+        const { participants } = { ...gameState };
+        const updatedParticipants = [...participants];
+        updatedParticipants[0].promptmaster = true;
+        updatedParticipants[1].matcher = true;
+        setGameState({
+            ...gameState,
+            isReady:true
+        })
     }
     function startRound() {
         if(gameState.participants) {
@@ -305,36 +319,76 @@ export default function OfflineGame() {
             }
         }
     }
-    return (
-        <div className="registration">
-            <form>
-                <fieldset>
-                    <input type="name" id="participantName" value={input} onChange={e=> setInput(e.target.value)} />
-                    <label for="participantName">Enter your name</label>
-                </fieldset>
-                <button type="submit" id="createParticipant" onClick={(e)=>{
-                    e.preventDefault();
-                    createParticipant(input)
-                }}>Create Player</button>
-            </form>
-            <button onClick={()=>startGame()}>Start Game</button>
-            <button onClick={()=>seeState()}>See State</button>
-        </div>
-        // <div className="gameBoard">
-        //     <GameHeader {...roundState}/>
-        //     <div className="responseArea">
-        //         {getAnswers()}
-        //     </div>
-        //     <div className="playerArea">
-        //         {getPlayers()}
-        //         {/* <Players {...gameState} /> */}
-        //     </div>
-        //     {/* <ActionBtns /> */}
-        //     <div className="actions">
-        //         <button onClick={()=>startRound()}>Start Round</button>
-        //         <button onClick={()=>endRound()}>End Round</button>
-        //         <button onClick={()=>seeState()}>See State</button>
-        //     </div>
-        // </div>
-    )
+    function playerRegistration(){
+        return (
+            <div className="registration">
+                <div className="welcome">
+                    <h1>Welcome!</h1>
+                    <p>Please select an avatar and enter a name for each player</p>
+                </div>
+                <form>
+                    <fieldset className="avatarsFieldset">
+                        <legend>Choose an avatar</legend>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value="images/avatars/woman1.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <img src="images/avatars/woman1.svg" alt="Select Woman 1 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value="images/avatars/woman2.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <img src="images/avatars/woman2.svg" alt="Select Woman 2 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value="images/avatars/woman3.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <img src="images/avatars/woman3.svg" alt="Select Woman 3 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value="images/avatars/man1.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <img src="images/avatars/man1.svg" alt="Select Man 1 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value="images/avatars/man2.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <img src="images/avatars/man2.svg" alt="Select Man 2 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value="images/avatars/man3.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <img src="images/avatars/man3.svg" alt="Select Man 3 Avatar"/>
+                        </label>
+                    </fieldset>
+                    <fieldset className="participantFieldset">
+                        <input type="name" id="participantName" value={input} onChange={e=> setInput(e.target.value)}  required/>
+                        <label for="participantName">Enter your name</label>
+                    </fieldset>
+                    <button type="submit" id="createParticipant" onClick={(e)=>{
+                        e.preventDefault();
+                        if ( input && avatar ) {
+                            createParticipant(input);
+                            setInput('');
+                        }
+                    }}>Create Player</button>
+                    <span className="submitOr">or</span>
+                    <button className="startGameBtn" onClick={()=>startGame()}>Start Game</button>
+                </form>
+                <button onClick={()=>seeState()}>See State</button>
+            </div>
+        )
+    }
+    function gameBoard() {
+        return (
+            <div className="gameBoard">
+                <GameHeader {...roundState}/>
+                <div className="responseArea">
+                    {getAnswers()}
+                </div>
+                <div className="playerArea">
+                    {getPlayers()}
+                </div>
+                <div className="actions">
+                    <button onClick={()=>startRound()}>Start Round</button>
+                    <button onClick={()=>endRound()}>End Round</button>
+                    <button onClick={()=>seeState()}>See State</button>
+                </div>
+            </div>
+        )
+    }
+    return (gameState.isReady) ? gameBoard() : playerRegistration()
 }
