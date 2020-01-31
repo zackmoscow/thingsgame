@@ -5,6 +5,7 @@ exports.LEAVE_GAME = 'leaveGame';
 exports.START_ROUND = 'startRound';
 exports.NEXT_ROUND = 'nextRound';
 exports.GAME_END = 'gameEnd';
+exports.RETURN_TO_LOBBY = 'returnToLobby';
 exports.SUBMITTED_PROMPT = 'submittedPrompt';
 exports.SUBMITTED_RESPONSE = 'submittedResponse';
 exports.MATCHED = 'matched';

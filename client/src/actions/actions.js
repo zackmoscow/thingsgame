@@ -99,3 +99,9 @@ export function gameEnd(gameID) {
     socket.emit('gameEnd', gameID);
   }
 }
+
+export function returnToLobby(gameID) {
+  return (dispatch) => {
+    socket.emit('returnToLobby', gameID)
+  }
+}

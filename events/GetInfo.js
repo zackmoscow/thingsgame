@@ -45,7 +45,9 @@ exports.getUserInfo = (gameID, cb) => {
           response: user.response,
           currentScore: user.currentScore,
           turn: user.turn,
-          wins: user.wins
+          wins: user.wins,
+          avatar: user.avatar,
+          gameWinner: user.gameWinner
         };
       });
       cb(userInfo);
