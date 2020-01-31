@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import GameHeader from "../../components/GameHeader";
-import OfflineGameStart from "../../components/OfflineGameStart";
-import Players from "../../components/Players";
-import ActionBtns from "../../components/ActionBtns";
 
 export default function OfflineGame() {
     const [input, setInput] = useState('');
     const [avatar, setAvatar] = useState('');
-    const [participantName, setParticipantName] = useState('');
     const [gameState, setGameState] = useState({
         gameId: null,
         isReady: false,
@@ -22,6 +18,7 @@ export default function OfflineGame() {
         roundQuestion: "",
         //responses: []
     });
+    const [position, setPosition] = useState(0);
     useEffect(()=> {
         setGameState({
             gameId: 5564,
@@ -107,7 +104,7 @@ export default function OfflineGame() {
             name: input, 
             avatar: avatar,
             score: 0,
-            position: 0,
+            position,
             response:"",
             isEliminated: false,
             matcher: false,
@@ -117,7 +114,8 @@ export default function OfflineGame() {
         setGameState({
             ...gameState,
             participants: enteredParticipants
-        })
+        });
+        setPosition(position + 1);
         console.log(gameState);
     }
     function startGame(){

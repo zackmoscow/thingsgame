@@ -16,12 +16,7 @@
     padding:2em 0;
     
 }
-.submitOr {
-    border-top:1px solid;
-    border-bottom:1px solid;
-    margin: 0 1em;
-    text-transform: uppercase;
-}
+
 #createParticipant, .startGameBtn {
     background: #f76c6c;
     border: none;
