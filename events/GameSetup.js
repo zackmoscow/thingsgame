@@ -58,6 +58,7 @@ function createGame(socket, io) {
           gameID: gameID,
           gameState: GameStates.LOBBY,
           prompt: '',
+          promptMaster: userName,
           round: 1,
           users: 1,
           currentTurn: 1
@@ -120,7 +121,7 @@ function createGame(socket, io) {
           Info.getGameInfo(gameID, (gameInfo) => {
             Info.getUserInfo(gameID, (userInfo) => {
                 socket.emit(Events.ADDED_TO_GAME, gameInfo, userInfo);
-                socket.to(gameID).emit(Events.UPDATE, userInfo);
+                socket.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
             });
           });
       })

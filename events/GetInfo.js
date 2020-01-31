@@ -17,6 +17,7 @@ exports.getGameInfo = (gameID, cb) => {
       gameID: gameID,
       gameState: game.gameState,
       prompt: game.prompt,
+      promptMaster: game.promptMaster,
       round: game.round
     };
     cb(gameInfo);
@@ -43,9 +44,10 @@ exports.getUserInfo = (gameID, cb) => {
           state: user.state,
           response: user.response,
           currentScore: user.currentScore,
-          avatar: user.avatar,
           turn: user.turn,
-          wins: user.wins
+          wins: user.wins,
+          avatar: user.avatar,
+          gameWinner: user.gameWinner
         };
       });
       cb(userInfo);

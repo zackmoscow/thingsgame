@@ -17,17 +17,6 @@ export default function Title() {
     const dispatch = useDispatch();
     const gameInfo = useSelector(state => state.gameInfo);
     const userInfo = useSelector(state => state.userInfo);
-    
-    function turnUserInfoIntoArray() {
-        let users = [];
-        for (let key in userInfo) {
-            users.push({
-                userName: key,
-                ...userInfo[key]
-            })
-        }
-        return users;
-    }
   
     function setUser(val){
         const userInfo = {
@@ -100,6 +89,7 @@ export default function Title() {
                     {turnUserInfoIntoArray().map(user => <p>You've won {user.wins} games.</p>)}
                     <p>Current game:</p>
                     {copyBtn()}
+
                     <img className="userAvatar" src={userAvatar} />
                     <div>
                     {showAvatars()}

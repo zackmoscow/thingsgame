@@ -1,103 +1,205 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-//import OpenSocket from "socket.io-client";
+import GameHeader from "../../components/GameHeader";
+import OfflineGameStart from "../../components/OfflineGameStart";
+import Players from "../../components/Players";
+import ActionBtns from "../../components/ActionBtns";
 
 export default function OfflineGame() {
+    const [input, setInput] = useState('');
+    const [participantName, setParticipantName] = useState('');
     const [gameState, setGameState] = useState({});
     const [roundState, setRoundState] = useState({
-        round: 0,
+        round: 1,
         promptmaster: {},
+        matcher: {},
         players: [],
         roundQuestion: "",
-        responses: [
-        ]
+        //responses: []
     });
     useEffect(()=> {
         setGameState({
-            "gameId": 5564,
-            "participants": [
-                {
-                    id: 1,
-                    name: "Cathy", 
-                    score: 0, 
-                    avatar: "images/avatars/woman1.svg",
-                    position: 0,
-                    response:"",
-                    isEliminated: false,
-                },
-                {
-                    id: 2,
-                    name: "Mark", 
-                    score: 0, 
-                    avatar: "images/avatars/man1.svg",
-                    position: 1,
-                    response:"",
-                    isEliminated: false
-                },
-                {
-                    id: 3,
-                    name: "Karen", 
-                    score: 0, 
-                    avatar: "images/avatars/woman2.svg",
-                    position: 2,
-                    response:"",
-                    isEliminated: false
-                },
-                {
-                    id: 4,
-                    name: "Scottie", 
-                    score: 0,
-                    avatar: "images/avatars/man2.svg",
-                    position: 3, 
-                    response:"",
-                    isEliminated: false
-                },
-                {
-                    id: 5,
-                    name: "Margaret", 
-                    score: 0, 
-                    avatar: "images/avatars/woman3.svg",
-                    position: 4, 
-                    response:"",
-                    isEliminated: false
-                },
-                {
-                    id: 6,
-                    name: "Dave", 
-                    score: 0, 
-                    avatar: "images/avatars/man3.svg",
-                    position: 5, 
-                    response:"",
-                    isEliminated: false
-                }
+            gameId: 5564,
+            participants: [
+                // {
+                //     id: 1,
+                //     name: "Cathy", 
+                //     avatar: "images/avatars/woman1.svg",
+                //     score: 0, 
+                //     position: 0,
+                //     response:"",
+                //     isEliminated: false,
+                //     matcher: false,
+                //     promptmaster: true
+                // },
+                // {
+                //     id: 2,
+                //     name: "Mark", 
+                //     avatar: "images/avatars/man1.svg",
+                //     score: 0, 
+                //     position: 1,
+                //     response:"",
+                //     isEliminated: false,
+                //     matcher: true,
+                //     promptmaster: false
+                // },
+                // {
+                //     id: 3,
+                //     name: "Karen", 
+                //     avatar: "images/avatars/woman2.svg",
+                //     score: 0, 
+                //     position: 2,
+                //     response:"",
+                //     isEliminated: false,
+                //     matcher: false,
+                //     promptmaster: false
+                // },
+                // {
+                //     id: 4,
+                //     name: "Scottie", 
+                //     avatar: "images/avatars/man2.svg",
+                //     score: 0,
+                //     position: 3, 
+                //     response:"",
+                //     isEliminated: false,
+                //     matcher: false,
+                //     promptmaster: false
+                // },
+                // {
+                //     id: 5,
+                //     name: "Margaret", 
+                //     avatar: "images/avatars/woman3.svg",
+                //     score: 0, 
+                //     position: 4, 
+                //     response:"",
+                //     isEliminated: false,
+                //     matcher: false,
+                //     promptmaster: false
+                // },
+                // {
+                //     id: 6,
+                //     name: "Dave", 
+                //     avatar: "images/avatars/man3.svg",
+                //     score: 0, 
+                //     position: 5, 
+                //     response:"",
+                //     isEliminated: false,
+                //     matcher: false,
+                //     promptmaster: false
+                // }
             ]
         });
     },[]);
+    function seeState() {
+        console.log("GS ", gameState);
+        console.log("RS ", roundState);
+    }
+    function createParticipant(input) {
+        const {participants} = { ...gameState };
+        const enteredParticipants = [...participants];
+        let newParticipant = {
+            name: input, 
+            avatar: "images/avatars/woman1.svg",
+            score: 0, 
+            position: 0,
+            response:"",
+            isEliminated: false,
+            matcher: false,
+            promptmaster: false
+        };
+        enteredParticipants.push(newParticipant)
+        setGameState({
+            ...gameState,
+            participants: enteredParticipants
+        })
+        console.log(gameState);
+    }
+    function startGame(){
+        console.log('start game')
+    }
     function startRound() {
         if(gameState.participants) {
-            const updatedGameState = { ...gameState };
-            const roundArray = updatedGameState.participants.sort((a,b) => (a.position > b.position) ? 1 : -1);
-            // const roundArrayResponses = roundArray.map(r => r.response);
-            const roundQuestion = prompt(`${JSON.stringify(roundArray[0].name)}, what is the category`);
-            const copiedArray = [];
-
-            for(let i=0; i< updatedGameState.participants.length; i++ ) {
-                let playerResponse = prompt(`${JSON.stringify(roundArray[i].name)}, the category is ${(roundQuestion) ? roundQuestion.toUpperCase() : null }. Please enter your response`);
-                copiedArray.push({ "id": roundArray[i].name,"response": playerResponse });
+            const { participants } = { ...gameState };
+            const roundQuestion = prompt(`${JSON.stringify(participants[0].name)}, what is the category`);
+            const matcher = participants.find(o=> o.matcher );
+            const promptmaster = participants.find( o=> o.promptmaster );
+            
+            for(let i=0; i< participants.length; i++ ) {
+                let playerResponse = prompt(`${JSON.stringify(participants[i].name)}, the category is ${(roundQuestion) ? roundQuestion.toUpperCase() : null }. Please enter your response`);
+                
+                let matchedParticpant = participants.indexOf(participants.find(o => o.name === participants[i].name));
+                let updatedParticipants = [...participants];
+                updatedParticipants[matchedParticpant].response = playerResponse;
+                setGameState({
+                    ...gameState,
+                    participants: updatedParticipants
+                });
             }
-
             setRoundState({
                 ...roundState,
-                round: (roundState.round + 1),
-                promptmaster: roundArray[0],
-                players: roundArray,
+                round: roundState.round,
+                promptmaster: promptmaster,
+                matcher: matcher,
                 roundQuestion: roundQuestion,
-                responses: copiedArray
             });
         }
         else { console.log('start failed')}
     };
-
+    function endRound() {
+        if (roundState.round <= ( gameState.participants.length - 1 )){
+            const {participants} = gameState;
+            const newOrder = participants.forEach(o=>{
+                o.position = o.position -1;
+                o.response = "";
+                if (o.position <=-1) o.position = participants.length - 1;
+                o.isEliminated = false;
+                if(o.position === 0) {
+                    o.promptmaster = true;
+                } else {
+                    o.promptmaster = false;
+                }
+                if(o.position === 1) {
+                    o.matcher = true;
+                } else {
+                    o.matcher = false;
+                }
+            });
+            const updatedGameState = { ...gameState };
+            const roundArray = updatedGameState.participants.sort((a,b) => (a.position > b.position) ? 1 : -1);
+            console.log(newOrder);
+            setGameState({
+                ...gameState,
+                participants: roundArray
+            })
+            setRoundState({
+                ...roundState,
+                round: (roundState.round + 1),
+                promptmaster: gameState.participants[0],
+                players: [],
+                roundQuestion: "",
+                responses: []
+            });
+        } else {
+            console.log('congrats the game is over')
+            const updatedGameState = { ...gameState };
+            const roundArray = updatedGameState.participants.sort((a,b) => (a.score > b.score) ? -1 : 1);
+            return (
+                console.log('the winner is ',roundArray[0])
+                // <div>
+                //     <p>The game is over,</p>
+                //     <h2>and the winner is...</h2>
+                //     <img src={roundArray[0].avatar} alt={`${roundArray[0].name}'s avatar`}/>
+                //     <h1>{roundArray[0].name}</h1>
+                //     <button onClick={()=>{startGame()}}>New Game</button>
+                //     <button onClick={()=>{endGame()}}>Main Menu</button>
+                // </div>
+            )
+        }
+    }
+    function scoreboard() {
+        console.log('finished');
+        return <button onClick={()=>endRound()}>End Round</button>
+    }
     function onDragOver(ev) {
         ev.preventDefault();
         let el = ev.target.parentNode.children[0];
@@ -105,8 +207,6 @@ export default function OfflineGame() {
     };
     function onDragEnter(ev){
         console.log(ev.target.parentNode.children)
-        
-        // getDocumentById()
     };
     function onDragLeave(ev) {
         let el = ev.target.parentNode.children[0];
@@ -121,25 +221,42 @@ export default function OfflineGame() {
         let pId = ev.target.parentNode.id;
         let el = ev.target.parentNode.children[0];
         el.classList.remove('class', 'dragHover');
+        const { participants } = { ...gameState };
         if (id === pId) {
             console.log('match!');
-            const { participants } = { ...gameState };
+            //const { participants } = { ...gameState };
             const matchedParticpant = participants.indexOf(participants.find(o => o.name === pId));
-            console.log(matchedParticpant);
-            // const index = gameState.participants.indexOf(matched);
-            const updatedParticipants = [... participants];
+            const matchingParticipant = participants.indexOf(participants.find(o => o.matcher));
+            const updatedParticipants = [...participants];
             updatedParticipants[matchedParticpant].isEliminated = true;
+            updatedParticipants[matchingParticipant].score += 1;
             setGameState({
                 ...gameState,
                 participants: updatedParticipants,
-            })
-            //let elminated = matched.map(o => o.isEliminated = true);
-            console.log("gs",gameState.participants);
+            });
         }else {
-            console.log('not a match')
+            console.log('not a match');
+            const filterPrompt = participants.filter( o => !o.promptmaster );
+            const filterEliminatedUsers = filterPrompt.filter( o => !o.isEliminated );
+            const incorrectMatch = filterEliminatedUsers.indexOf(filterEliminatedUsers.find(o => o.matcher));
+            const nextMatcher = filterEliminatedUsers[(incorrectMatch + 1) % filterEliminatedUsers.length];
+            const oldMatcher = participants.indexOf(participants.find(o => o.name === filterEliminatedUsers[incorrectMatch].name));
+            const newMatcher = participants.indexOf(participants.find(o => o.name === nextMatcher.name));
+
+            const updatedParticipants = [...participants];
+            updatedParticipants[oldMatcher].matcher = false;
+            updatedParticipants[newMatcher].matcher = true;
+
+            setGameState({
+                ...gameState,
+                participants: updatedParticipants
+            });
+            setRoundState({
+                ...roundState,
+                matcher: updatedParticipants[newMatcher]
+            })
         }
     }
-
     function player(o) {
         let playerClass = "player";
         let dragEvents = {
@@ -148,12 +265,10 @@ export default function OfflineGame() {
             onDragLeave: e => onDragLeave(e),
             onDrop: e=> onDrop(e)
         }
-        
-        if (o.isEliminated) {
+        if (o.isEliminated || o.promptmaster) {
             playerClass = "player eliminated";
             dragEvents = {};
         }
-
         return(
             <div className={playerClass} key={o.id} id={o.name} {...dragEvents}>
                 <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/>
@@ -168,40 +283,58 @@ export default function OfflineGame() {
             return gameState.participants.map(player);
         }
     }
-
     function getAnswers() {
-        if (roundState && roundState.responses) {
-            const array = roundState.responses;
-            if(array){
-                let shuffledArray = [...array];
-                let len = array.length;
-                for(let i = 0; i < len; i += 1) {
-                    let randomIndex = Math.floor(Math.random() * len);
-                    [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]];
+        if (gameState.participants) {
+            const { participants } = { ...gameState };
+            const array = participants;
+            const filteredUsers = array.filter(o => !o.isEliminated);
+            if(filteredUsers[0]){
+                let shuffledArray = [...filteredUsers];
+                let len = filteredUsers.length;
+                if (len > 2) {
+                    for(let i = 0; i < len; i += 1) {
+                        let randomIndex = Math.floor(Math.random() * len);
+                        [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]];
+                    }
+                    return shuffledArray.map(o=> (
+                        <p className="response" key={o.id} draggable onDragStart={e=>onDragStart(e, o.name)}>{o.response}</p>
+                    ));
+                } else {
+                    return scoreboard();
                 }
-                return shuffledArray.map(o=> (
-                    <p className="response" key={o.id} draggable onDragStart={e=>onDragStart(e, o.id)}>{o.response}</p>
-                ));
             }
         }
     }
-        return (
-            <div className="gameBoard">
-                <div className="headerArea">
-                    <h1>Round {roundState.round}</h1>
-                    <h2>promptmaster {(roundState.promptmaster) ? roundState.promptmaster.name : null}</h2>
-                    <h2>Question: {(roundState.roundQuestion) ? roundState.roundQuestion : null}</h2>
-                </div>
-                <div className="responseArea">
-                    {getAnswers()}
-                </div>
-                <div className="playerArea">
-                    {getPlayers()}
-                </div>
-                <div className="actions">
-                    <button onClick={()=>startRound()}>Start Round</button>
-                </div>
-                
-            </div>
-        )
+    return (
+        <div className="registration">
+            <form>
+                <fieldset>
+                    <input type="name" id="participantName" value={input} onChange={e=> setInput(e.target.value)} />
+                    <label for="participantName">Enter your name</label>
+                </fieldset>
+                <button type="submit" id="createParticipant" onClick={(e)=>{
+                    e.preventDefault();
+                    createParticipant(input)
+                }}>Create Player</button>
+            </form>
+            <button onClick={()=>startGame()}>Start Game</button>
+            <button onClick={()=>seeState()}>See State</button>
+        </div>
+        // <div className="gameBoard">
+        //     <GameHeader {...roundState}/>
+        //     <div className="responseArea">
+        //         {getAnswers()}
+        //     </div>
+        //     <div className="playerArea">
+        //         {getPlayers()}
+        //         {/* <Players {...gameState} /> */}
+        //     </div>
+        //     {/* <ActionBtns /> */}
+        //     <div className="actions">
+        //         <button onClick={()=>startRound()}>Start Round</button>
+        //         <button onClick={()=>endRound()}>End Round</button>
+        //         <button onClick={()=>seeState()}>See State</button>
+        //     </div>
+        // </div>
+    )
 }

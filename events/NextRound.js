@@ -56,7 +56,7 @@ function nextRound(socket, io) {
 
             promptTurn.hasWent.push(promptMaster._id);
 
-              Game.findOneAndUpdate({ gameID: gameID }, { hasWent: promptTurn.hasWent }, (err, res) => {
+              Game.findOneAndUpdate({ gameID: gameID }, { promptMaster: user.userName, hasWent: promptTurn.hasWent }, (err, res) => {
                 if (err) {
                   socket.emit(Events.ERROR, err);
                   return;
@@ -81,7 +81,7 @@ function nextRound(socket, io) {
                 socket.emit(Events.ERROR, err);
                 return;
               }
-              Game.findOneAndUpdate({ gameID: gameID }, { hasWent: promptTurn.hasWent }, (err, res) => {
+              Game.findOneAndUpdate({ gameID: gameID }, { promptMaster: user.userName, hasWent: promptTurn.hasWent }, (err, res) => {
                 if (err) {
                   socket.emit(Events.ERROR, err);
                   return;
