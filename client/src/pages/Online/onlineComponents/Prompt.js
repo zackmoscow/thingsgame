@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { submitPrompt } from '../../../actions/actions';
 import { UserContext } from '../../utils/UserContext';
@@ -72,7 +72,7 @@ export default function Prompt() {
                             </ul>
                         </div>
                         <div className="actions">
-                            <button onClick={()=>startRound()}>Start Round</button>
+                            {/* <button onClick={()=>startRound()}>Start Round</button> */}
                         </div>
                     </div>
                 )
