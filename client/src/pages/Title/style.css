@@ -1,3 +1,8 @@
+.titleScreen {
+    max-width:40em;
+    margin:auto;
+    padding:4em 2em;
+}
 fieldset {
     margin-bottom:2em;
     position:relative;
@@ -11,12 +16,15 @@ button {
     display:inline-block;
     margin:0 1em 0 0;
 }
-#loginSubmit {
+#loginSubmit, #signup {
     background: #f76c6c;
     border: none;
     color: #000;
     font-weight: 700;
     padding: 1em 2em;
+}
+#signup {
+    background: #f8e9a1;
 }
 .titleScreen label {
     font-size:.75em;
