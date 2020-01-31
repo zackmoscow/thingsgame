@@ -5,11 +5,17 @@ import OfflineGame from "./pages/Offline";
 import Title from "./pages/Title";
 import UserProvider from "./utils/UserContext.js";
 import Color from "./components/colorBox";
+import { createStore, applyMiddleware } from 'redux';
+import rootReducer from './reducers/root';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 
 function App() {
-
   return (
+    <Provider store={store}>
     <UserProvider>
       <Router>
         <Switch>
@@ -20,6 +26,7 @@ function App() {
       </Router>
       <Color />
     </UserProvider>
+    </Provider>
   );
 }
 

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
+import {Link, Redirect} from "react-router-dom";
 import "./style.css";
 import Axios from "axios";
 import {UserContext} from '../../utils/UserContext';
@@ -11,12 +12,15 @@ export default function Title() {
     const [inputType, setInputType] = useState("password");
     const [loginError, setLoginError] = useState(null);
     const [signupError, setSignupError] = useState(null);
+    const [redirect, setRedirect] = useState(false);
     const pwInput = useRef(null);
     const emailInput = useRef(null);
     const [gameIDInput, setGameIDInput] = useState('');
     const dispatch = useDispatch();
     const gameInfo = useSelector(state => state.gameInfo);
     const userInfo = useSelector(state => state.userInfo);
+
+    console.log('gameInfo', gameInfo)
   
     function setUser(val){
         const userInfo = {
@@ -76,7 +80,7 @@ export default function Title() {
 
     function enterBtn(){
         if(gameInfo.gameID){
-            return <a href="/onlineGame"><button>Enter Game</button></a>
+            return <Link to="/onlineGame"><button>Enter Game</button></Link>
         }
     }
 
@@ -171,7 +175,8 @@ export default function Title() {
         console.log(gameIDInput);
         if (gameIDInput !== '') {
             dispatch(joinGame(gameIDInput, userName, userAvatar));
-            window.location.assign('localhost:3000/onlineGame')
+            // window.location.assign('localhost:3000/onlineGame')
+            setRedirect(true);
         }
         else {
             dispatch(setError('Game code can not be blank'));
@@ -186,6 +191,7 @@ export default function Title() {
         <section className="titleScreen">
             {isLoggedIn()}
             {showForm()}
+            {redirect && <Redirect to="/onlineGame" />}
             <a id="offlineGameInit" href="/offlinegame">Start Local Game</a>
         </section>
     )

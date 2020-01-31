@@ -18,7 +18,8 @@ exports.getGameInfo = (gameID, cb) => {
       gameState: game.gameState,
       prompt: game.prompt,
       promptMaster: game.promptMaster,
-      round: game.round
+      round: game.round,
+      users: game.users
     };
     cb(gameInfo);
   });
