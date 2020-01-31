@@ -7,10 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { newGame, joinGame, setError } from '../../actions/actions';
 
 export default function Title() {
-    const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated, getUser} = useContext(UserContext);
+    const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated} = useContext(UserContext);
     const [inputType, setInputType] = useState("password");
     const [loginError, setLoginError] = useState(null);
-    const [signupError, setSignupError] = useState(null);
+    const [signupError, setSignupError] = useState(null);  
     const pwInput = useRef(null);
     const emailInput = useRef(null);
     const [gameIDInput, setGameIDInput] = useState('');
@@ -66,14 +66,40 @@ export default function Title() {
         })
     }
 
+    function copyGameID(){
+        var copyText = document.querySelector('#gameID');
+        copyText.select();
+        copyText.setSelectionRange(0, 99999)
+        document.execCommand("copy");
+        alert(`Copied game id ${copyText.value} to your clipboard. Invite your friends!`);
+    }
+
+
+    function copyBtn(){
+        if(gameInfo.gameID){
+            return (
+                <div>
+                    <input id="gameID" value={gameInfo.gameID} readOnly></input>
+                <button onClick={()=>copyGameID()}>Copy to clipboard</button>
+                </div>
+            )
+        }
+    }
+
+    function enterBtn(){
+        if(gameInfo.gameID){
+            return <a href="/onlinegame"><button>Enter Game</button></a>
+        }
+    }
+
     function isLoggedIn(){
         if(isAuthenticated){
-            
             return(
                 <div>
                     <h1>Welcome, {userName}!</h1>
                     {turnUserInfoIntoArray().map(user => <p>You've won {user.wins} games.</p>)}
-                    <p>Current game: {gameInfo.gameID} </p>
+                    <p>Current game:</p>
+                    {copyBtn()}
                     <img className="userAvatar" src={userAvatar} />
                     <div>
                     {showAvatars()}
@@ -85,11 +111,12 @@ export default function Title() {
                     <button id="createOnlineGame" onClick={(e)=>newOnlineGame(e)}>Create New Game</button>
                     <form>
                       <fieldset>
-                        <input type='input' value={gameIDInput} onChange={gameIDChange}/>
+                        <input type='input' id="gameIDInput" value={gameIDInput} onChange={gameIDChange}/>
                         <label htmlFor="joinGameID">GameID</label>
                       </fieldset>
                     </form>
                     <button id="joinOnlineGame" onClick={(e)=>joinOnlineGame(e)}>Join Existing Game</button>
+                    {enterBtn()}
                 </div>
                 )
         }
