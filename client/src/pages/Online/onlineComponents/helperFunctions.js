@@ -14,7 +14,7 @@ export function turnUserInfoIntoArray() {
 }
 
 export function getUsers() {
-    return turnUserInfoIntoArray.map(user)
+    return turnUserInfoIntoArray().map(user)
 }
 
 function user(o) {

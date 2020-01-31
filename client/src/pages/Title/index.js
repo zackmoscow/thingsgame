@@ -86,7 +86,6 @@ export default function Title() {
             return(
                 <div>
                     <h1>Welcome, {userName}!</h1>
-                    {turnUserInfoIntoArray().map(user => <p>You've won {user.wins} games.</p>)}
                     <p>Current game:</p>
                     {copyBtn()}
 
@@ -172,7 +171,7 @@ export default function Title() {
         console.log(gameIDInput);
         if (gameIDInput !== '') {
             dispatch(joinGame(gameIDInput, userName, userAvatar));
-            window.location.assign('localhost:3000/onlinegame')
+            window.location.assign('localhost:3000/onlineGame')
         }
         else {
             dispatch(setError('Game code can not be blank'));
