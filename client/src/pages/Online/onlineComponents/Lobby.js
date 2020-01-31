@@ -5,11 +5,16 @@ import { getUsers } from './helperFunctions';
 import '../style.css';
 
 export default function Lobby() {
-    const gameInfo = useSelector(state => state.gameInfo);
+    const gameInfo = useSelector(state => {
+      console.log('state:', state);
+      return state.gameInfo;
+    });
+    
     const dispatch = useDispatch();
 
     function handleStartRound(e) {
         e.preventDefault();
+        console.log(gameInfo);
         dispatch(startRound(gameInfo.gameID));
     }
 
