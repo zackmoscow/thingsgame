@@ -1,6 +1,4 @@
-const defaultGameInfo = {}
-
-export default function gameInfoReducer(gameInfo = defaultGameInfo, action) {
+export default function gameInfoReducer(gameInfo = {}, action) {
   switch (action.type) {
     case 'gameInfo':
       return gameInfo = action.payload;
