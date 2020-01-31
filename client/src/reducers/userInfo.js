@@ -1,6 +1,4 @@
-const defaultUserInfo = {};
-
-export default function userInfoReducer(userInfo = defaultUserInfo, action) {
+export default function userInfoReducer(userInfo = {}, action) {
     switch (action.type) {
         case 'userInfo':
             return userInfo = action.payload;
