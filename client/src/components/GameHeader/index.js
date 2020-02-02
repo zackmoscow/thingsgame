@@ -3,7 +3,7 @@ import "./style.css";
 
 export default function GameHeader(props) {
     return (
-        <div className="headerArea">
+        <div className="headerArea clearfix">
             <div className="leftHeader">
                 <h2 className="round"><span>Round</span> {props.round}</h2>
                 <h2 className="promptmaster"><span>promptmaster</span> {(props.promptmaster) ? props.promptmaster.name : "waiting"}</h2>

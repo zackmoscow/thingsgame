@@ -7,11 +7,6 @@
     font-size: .75em;
     color: rgba(255,255,255,.5);
 }
-.registration {
-    max-width:40em;
-    margin:auto;
-    padding:4em 2em;
-}
 .registration form {
     padding:2em 0;
     
@@ -22,7 +17,6 @@
     border: none;
     color: #000;
     font-weight: 700;
-    margin:0;
     padding: 1em 2em;
 }
 .startGameBtn {
@@ -43,7 +37,7 @@
     cursor: pointer;
     float:left;
     padding:.25em;
-    width:16.667%;
+    width:25%;
 }
 [type=radio] {
     opacity: 0;
@@ -72,9 +66,11 @@
 .eliminated {
     opacity:25%;
 }
-.playerAvatar {
+.player svg {
     border-radius:50%;
+    position: relative;
     width:100%;
+    z-index: -1;
 }
 .playerName {
     color: #fff;
@@ -85,6 +81,7 @@
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
     text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+    z-index: 1;
 }
 .playerScore {
     background: #24305e;
@@ -99,7 +96,17 @@
     position: absolute;
     bottom: 0;
     right: 0;
+    z-index: 1;
 }
+.filter {
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    z-index:0;
+}
+
 .responseArea {
     float:left;
     padding:2em;

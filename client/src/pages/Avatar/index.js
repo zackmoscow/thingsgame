@@ -17,7 +17,7 @@ export default function Avatar() {
     });
 
     const skinToneArr = ["#ffebc6","#ffcc8a","#8a5d3b" ];
-    const hairColorArr = ["#dddddd","#ad874d", "#b55723", "#690004", "#000000"];
+    const hairColorArr = ["#dddddd","#ad874d", "#b55723", "#690004", "#2c1111", "#000000"];
     const backgroundColorArr = ["#f8e9a1", "#f76c6c", "#a8d0e6", "#008feb", "#374785"];
 
     const hair1 = {background: hairColorArr[0]};
