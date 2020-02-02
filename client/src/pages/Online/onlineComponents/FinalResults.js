@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Redirect } from "react-router-dom";
 import { getUsers } from './helperFunctions';
-import { returnToLobby } from '../../../actions/actions';
+import { returnToTitle } from '../../../actions/actions';
 import '../style.css';
 
 export default function RoundResults() {
     const gameInfo = useSelector(state => state.gameInfo);
-    // const userInfo = useSelector(state => state.userInfo);
     const dispatch = useDispatch();
+    const [redirect, setRedirect] = useState(false);
 
-    function handleReturnToLobbySubmit(e) {
+    function handleReturnToTitleSubmit(e) {
         e.preventDefault();
-        dispatch(returnToLobby(gameInfo.gameID));
+        dispatch(returnToTitle(gameInfo.gameID));
+        setRedirect(true);
     }
 
     return (
@@ -23,14 +25,15 @@ export default function RoundResults() {
         </div>
         <div className='responseArea'>
             <p>Game over!</p>
-            <p>Congratulations to the user who won!</p>
+            <p>Congratulations to our winner, {gameInfo.gameWinner}!</p>
         </div>
         <div className='playerArea'>
             {getUsers()}
         </div>
         <div className='actions'>
-            <button onClick={(e) => handleReturnToLobbySubmit(e)}>Return To Lobby!</button>
-        </div>   
+            <button onClick={(e) => handleReturnToTitleSubmit(e)}>Return To Home Page!</button>
+        </div>  
+        {redirect && <Redirect to="/" />} 
       </div>
     );
 }

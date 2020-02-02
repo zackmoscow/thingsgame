@@ -4,76 +4,89 @@ const UserStates = require('../helpers/UserStates');
 const Game = require('../models/game');
 const User = require('../models/user');
 const Info = require('./GetInfo');
+const shuffle = require('lodash.shuffle');
 
 function submitResponse(socket, io) {
-   
+
   socket.on(Events.SUBMITTED_RESPONSE, (gameID, userName, response) => {
     response = response.trim();
 
-      // Update user who answered's state to "responded", pass in their answer
+    // Update user who answered's state to "responded", pass in their answer
 
-      User.updateOne({ gameID: gameID, userName: userName }, { state: UserStates.RESPONDED, response: response }, (err, res) => {
+    User.findOneAndUpdate({ gameID: gameID, userName: userName }, { state: UserStates.RESPONDED, response: response }, (err, res) => {
+      if (err) {
+        socket.emit(Events.ERROR, err);
+        return;
+      }
+
+      // Find users with "noResponse" states
+
+      User.find({ gameID: gameID, state: UserStates.NO_RESPONSE }, (err, users) => {
         if (err) {
           socket.emit(Events.ERROR, err);
           return;
         }
 
-        // Find users with "noResponse" states
+        // If no users are 'noResponse', switch game state to matching, update all player states to "inline", update one non-Promptmaster state to "matching", update Promptmaster state to "wasPromptmaster"
 
-        User.find({ gameID: gameID, state: UserStates.NO_RESPONSE }, (err, users) => {
-          if (err) {
-            socket.emit(Events.ERROR, err);
-            return;
-          }
+        if (users.length == 0) {
 
-          // If no users are 'noReponse', switch game state to matching, update all player states to "inline", then update one player state to "matching"
-
-          if (users.length == 0) {
-            Game.findOneAndUpdate({ gameID: gameID }, { gameState: GameStates.MATCHING }, (err, game) => {
+          Game.findOneAndUpdate({ gameID: gameID }, { gameState: GameStates.MATCHING }, (err, game) => {
+            if (err) {
+              socket.emit(Events.ERROR, err);
+              return;
+            }
+            User.updateMany({ gameID: gameID }, { state: UserStates.INLINE }, (err, res) => {
               if (err) {
                 socket.emit(Events.ERROR, err);
                 return;
               }
-              User.updateMany({ gameID: gameID }, { state: UserStates.INLINE }, (err, res) => {
+              User.find({ gameID: gameID, promptMaster: false }, (err, possibleMatchers) => {
                 if (err) {
                   socket.emit(Events.ERROR, err);
                   return;
                 }
-                User.find({ gameID: gameID, promptMaster: false}), (err, possibleMatchers) => {
-                  const firstMatcher = possibleMatchers[Math.floor(Math.random() * possibleMatchers.length)]
-                
-                User.updateOne({ gameID: gameID, userName: firstMatcher.userName }, { state: UserStates.MATCHING }, (err, res) => {
+                let matchers = shuffle(possibleMatchers);
+                let firstMatcher = matchers[0];
 
-                  // Emit update
+                User.findOneAndUpdate({ gameID: gameID, userName: firstMatcher.userName }, { state: UserStates.MATCHING }, (err, res) => {
+                  if (err) {
+                    socket.emit(Events.ERROR, err);
+                    return;
+                  }
 
-                  Info.getUserInfo(gameID, (userInfo) => {
-                    Info.getGameInfo(gameID, (gameInfo) => {
-                      io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
+                  User.findOneAndUpdate({ gameID: gameID, prompMaster: true }, { state: UserStates.WAS_PROMPTMASTER }, (err, res) => {
+                    if (err) {
+                      socket.emit(Events.ERROR, err);
+                      return;
+                    }
+                    
+                    // Emit update
+
+                    Info.getUserInfo(gameID, (userInfo) => {
+                      Info.getGameInfo(gameID, (gameInfo) => {
+                        io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
+                      });
                     });
-                   });
-                })
-              }
-              })
-            });
-          }
-
-          // If at least one user is still "noResponse", send update and wait for more responses
-
-          else {
-            Info.getUserInfo(gameID, (userInfo) => {
-              Info.getGameInfo(gameID, (gameInfo) => {
-                io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
+                  });
+                });
               });
             });
-          }
-        });
+          });
+        }
+
+        // If at least one user is still "noResponse", send update and wait for more responses
+
+        else {
+          Info.getUserInfo(gameID, (userInfo) => {
+            Info.getGameInfo(gameID, (gameInfo) => {
+              io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
+            });
+          });
+        }
       });
+    });
   });
 }
 
 module.exports = submitResponse;
-
-
-
-
-

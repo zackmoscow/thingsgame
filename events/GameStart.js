@@ -21,68 +21,63 @@ function startGame(socket, io) {
 
       // Validate we have enough users
 
-      if (users.length > 3) {
+      if (users.length > 2) {
 
         // Update promptTurn object
 
         promptTurn.allUsers = users.map(o => o._id);
 
-        // Update game state to prompt
+        // Update game state to prompt and push allUsers
 
-        Game.findOneAndUpdate({ gameID: gameID }, { allUsers: promptTurn.allUsers, gameState: GameStates.PROMPT, prompt: '' }, (err, game) => {
+        Game.findOneAndUpdate({ gameID: gameID }, { gameState: GameStates.PROMPT, prompt: '', allUsers: promptTurn.allUsers }, (err, game) => {
           if (err) {
             socket.emit(Events.ERROR, err);
             return;
           }
 
-          // Find promptmaster
+          // Assign all users state of "waiting"
 
-          User.findOne({ gameID: gameID, promptMaster: true }, (err, promptMaster) => {
+          User.updateMany({ gameID: gameID }, { state: UserStates.WAITING, response: '' }, (err, res) => {
             if (err) {
               socket.emit(Events.ERROR, err);
               return;
             }
 
-            promptTurn.hasWent.push(promptMaster._id);
+          // update promptmaster state to prompt
 
-            // Assign all other users state of "waiting"
-
-            User.updateMany({ gameID: gameID }, { state: UserStates.WAITING, response: ''}, (err, res) => {
+            User.findOneAndUpdate({ gameID: gameID, promptMaster: true }, { state: UserStates.PROMPT }, (err, user) => {
               if (err) {
                 socket.emit(Events.ERROR, err);
                 return;
               }
 
-              // update promptmaster state to prompt
+              promptTurn.hasWent.push(user._id);
 
-              User.updateOne({ gameID: gameID, userName: promptMaster.userName }, { state: UserStates.PROMPT }, (err, res) => {
+              // push hasWent
+
+              Game.findOneAndUpdate({ gameID: gameID }, { hasWent: promptTurn.hasWent }, (err, res) => {
                 if (err) {
                   socket.emit(Events.ERROR, err);
                   return;
                 }
 
-                Game.findOneAndUpdate({ gameID: gameID}, {hasWent: promptTurn.hasWent}, (err, res) => {
-                  if (err) {
-                    socket.emit(Events.ERROR, err);
-                    return;
-                  }
-
                 // emit update 
 
-                  Info.getUserInfo(gameID, (userInfo) => {
-                    Info.getGameInfo(gameID, (gameInfo) => {
-                      io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
-                    });
+                Info.getUserInfo(gameID, (userInfo) => {
+                  Info.getGameInfo(gameID, (gameInfo) => {
+                    io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
                   });
-                })
-              })
-            })
-          })
+                });
+              });
+            });
+          });
         });
       }
-      else {socket.emit(Events.NOT_ENOUGH_USERS, users.length)};
+      else { 
+        socket.emit(Events.NOT_ENOUGH_USERS, users.length);
+      }
     });
   });
-};
+}
 
 module.exports = startGame;

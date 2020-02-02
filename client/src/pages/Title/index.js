@@ -9,13 +9,12 @@ import { newGame, joinGame, setError } from '../../actions/actions';
 import Logo from "../../components/Logo";
 
 export default function Title() {
+
     const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated, getUser} = useContext(UserContext);
     const [loginModal, setLoginModal] = useState({ 
         isOpen: false,
         playerClass: "loginModal closed"
     });
-
-
     const [inputType, setInputType] = useState("password");
     const [loginError, setLoginError] = useState(null);
     const [signupError, setSignupError] = useState(null);

@@ -12,12 +12,11 @@ export default function Match() {
     const dispatch = useDispatch();
     const { userName } = useContext(UserContext);
 
-    function handleMatchSubmit(e, key, response) {
+    function handleMatchSubmit(key, response) {
         let match = {
             name: key,
             response: response
         }
-        e.preventDefault();
         dispatch(submitMatch(gameInfo.gameID, userName, match));
     }
 
@@ -35,21 +34,22 @@ export default function Match() {
         let el = ev.target.parentNode.children[0];
         el.classList.remove('dragHover');
     }
-    function onDragStart(ev, id) {
-        console.log("dragstart: ", id);
-        ev.dataTransfer.setData("id", id);
+    function onDragStart(ev) {
+        ev.dataTransfer.setData("id", ev.target.id);
+        console.log(ev.target.id);
     };
 
-    function onDrop(e, ev) {
+    function onDrop(ev) {
+        ev.preventDefault();
         let response = ev.dataTransfer.getData("id");
         let key = ev.target.parentNode.id;
         let el = ev.target.parentNode.children[0];
         el.classList.remove('class', 'dragHover');
-        handleMatchSubmit(e, key, response);
+        handleMatchSubmit(key, response);
     }
 
     function getUsers() {
-        return turnUserInfoIntoArray.map(user)
+        return turnUserInfoIntoArray().map(user)
     }
     
     function user(o) {
@@ -64,6 +64,10 @@ export default function Match() {
             userClass = "player eliminated";
             dragEvents = {};
         }
+        if (o.state === 'wasPromptmaster') {
+            userClass = "player eliminated";
+            dragEvents = {};
+        }
         return(
             <div className={userClass} key={o.userName} id={o.userName} {...dragEvents}>
                 <img src={o.avatar} alt={`${o.userName}'s Avatar`} className="playerAvatar lvl1"/>
@@ -75,12 +79,14 @@ export default function Match() {
 
     function getResponses() {
         let responseList = [];
-        turnUserInfoIntoArray.map(user => 
-            responseList.push(user.response)    
-        );
+        turnUserInfoIntoArray().map(user => {
+            if (user.state !== 'eliminated') {
+              responseList.push(user.response)  
+            }  
+        });
         shuffle(responseList);
-        return responseList.map(o=> (
-            <p className="response" key={o} draggable onDragStart={e=>onDragStart(e, o)}>{o}</p>
+        return responseList.map(response => (
+            <p className="response" key={response} id={response} draggable onDragStart={e=>onDragStart(e, response)}>{response}</p>
         ));
     }
     
@@ -89,62 +95,40 @@ export default function Match() {
         switch (userInfo[userName].state) {
             case 'matching':
                 return (
-                    <div className='gameBoard'>
-                    <div className='headerArea'>
-                        <h1>Round: {gameInfo.round}</h1>
-                        <h2>PromptMaster: {gameInfo.promptMaster}</h2>
-                        <h2>Prompt: {gameInfo.prompt}</h2>
-                    </div>
-                    <div className='responseArea'>
-                        <p>Your turn to match!</p>
-                        {getResponses()}
-                    </div>
-                    <div className='playerArea'>
-                        {getUsers()}
-                    </div>
-                </div>
+                    <p>Your turn to match!</p>   
                 )
             case 'inline':
                 return (
-                    <div className='gameBoard'>
-                        <div className='headerArea'>
-                            <h1>Round: {gameInfo.round}</h1>
-                            <h2>PromptMaster: {gameInfo.promptMaster}</h2>
-                            <h2>Prompt: {gameInfo.prompt}</h2>
-                        </div>
-                        <div className='responseArea'>
-                            <p>Waiting for your turn to match...</p>
-                            {getResponses()}
-                        </div>
-                        <div className='playerArea'>
-                            {getUsers()}
-                        </div>
-                    </div>
+                    <p>Paused: waiting for your turn to match...</p>
                 )
-                case 'eliminated':
-                    return (
-                        <div className='gameBoard'>
-                            <div className='headerArea'>
-                                <h1>Round: {gameInfo.round}</h1>
-                                <h2>PromptMaster: {gameInfo.promptMaster}</h2>
-                                <h2>Prompt: {gameInfo.prompt}</h2>
-                            </div>
-                            <div className='responseArea'>
-                                <p>Sorry, you have been eliminated.</p>
-                            </div>
-                            <div className='playerArea'>
-                                {getUsers()}
-                            </div>
-                        </div>
-                    )
+            case 'eliminated':
+                return (
+                    <p>Sorry, you have been eliminated.</p>
+                )
+            case 'wasPromptmaster':
+                return (
+                    <p>You are the PromptMaster and can't match this round.</p>
+                )
             default:
                 return ((<p>Something bad happened with userInfo.state</p>))
         }
     }
 
     return (
-        <div>
-            {view()}
+        <div className='gameBoard'>
+            <div className='headerArea'>
+                <h1>Round: {gameInfo.round}</h1>
+                <h2>PromptMaster: {gameInfo.promptMaster}</h2>
+                <h2>Prompt: {gameInfo.prompt}</h2>
+            </div>
+            <div className='responseArea'>
+                {view()}
+                {getResponses()}
+            </div>
+            
+            <div className='playerArea'>
+                {getUsers()}
+            </div>
         </div>
     );
 }

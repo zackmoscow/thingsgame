@@ -36,12 +36,9 @@ const UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  gameWinner: {
-    type: Boolean,
-    default: false
-  },
-  socketID: String,
-  avatar: String
+  avatar: String,
+  socketID: String
+  
 });
 
 UserSchema.pre("save", function(callback) {
@@ -69,6 +66,6 @@ UserSchema.pre("save", function(callback) {
     });
   };
   
-  const User = mongoose.model("User", UserSchema);
+  const User = mongoose.model("User", UserSchema, "User");
   
   module.exports = User;

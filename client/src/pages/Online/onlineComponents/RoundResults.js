@@ -26,7 +26,7 @@ export default function RoundResults() {
             <h2>Prompt: {gameInfo.prompt}</h2>
         </div>
         <div className='responseArea'>
-            <p>Round has ended!</p>
+            <h2>Round has ended!</h2>
         </div>
         <div className='playerArea'>
             {getUsers()}

@@ -11,6 +11,7 @@ const gameSchema = new Schema({
     currentTurn: Number,
     allUsers: Array,
     hasWent: Array,
+    gameWinner: String
 });
 
 const Game = mongoose.model("Game", gameSchema);

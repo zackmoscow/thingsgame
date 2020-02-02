@@ -39,7 +39,7 @@ export function joinGame(gameID, userName, userAvatar) {
 
     connectToServer(dispatch);
     
-      socket.emit('joinGame', gameID, userName);
+      socket.emit('joinGame', gameID, userName, userAvatar);
 
       socket.on('addedToGame', (gameInfo, userInfo) => {
         dispatch(setGameInfo(gameInfo));
@@ -72,6 +72,7 @@ export function startRound(gameID) {
 
 export function submitPrompt(gameID, prompt) {
   return (dispatch) => {
+    console.log('front end submit prompt', gameID, prompt);
     socket.emit('submittedPrompt', gameID, prompt);
   }
 }
@@ -100,8 +101,8 @@ export function gameEnd(gameID) {
   }
 }
 
-export function returnToLobby(gameID) {
+export function returnToTitle(gameID) {
   return (dispatch) => {
-    socket.emit('returnToLobby', gameID)
+    socket.emit('returnToTitle', gameID)
   }
 }

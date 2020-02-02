@@ -21,7 +21,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Title} />
-          {localStorage.getItem('thingsAuthToken') && <Route exact path="/onlineGame" component={OnlineGame} />}
+          <Route exact path="/onlineGame" component={OnlineGame} />
           <Route exact path="/offlinegame" component={OfflineGame} />
           <Route exact path="/avatar" component={Avatar} />
         </Switch>

@@ -5,14 +5,9 @@ const Game = require('../models/game');
 const User = require('../models/user');
 const Info = require('./GetInfo');
 
-// BIG PROBLEM: Getting users count from Game object to properly update "turn" parameter in User
-
-// Generate Game ID
-
-// Create Game using Game model and automatically add user who created game into the game
+// Create Game with shareable ID using Game model and automatically add user who created game into the game
 
 function createGame(socket, io) {
-
 
   function generateGameID() {
     const characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -26,7 +21,7 @@ function createGame(socket, io) {
   }
 
   function addUserToGame(userName, gameID, promptMaster, userAvatar) {
-    User.updateOne({userName : userName}, {
+    User.findOneAndUpdate({userName : userName}, {
       gameID: gameID, 
       state: UserStates.LOBBY, 
       promptMaster: promptMaster,
@@ -43,8 +38,6 @@ function createGame(socket, io) {
 
   socket.on(Events.NEW_GAME, (userName, userAvatar) => {
 
-    console.log('userName');
-
     let gameID = generateGameID();
 
     Game.findOne({ gameID: gameID }, (err, game) => {
@@ -53,8 +46,6 @@ function createGame(socket, io) {
         return;
       }
       if (game == null) {
-
-        console.log('Creating game')
         let NewGame = new Game({
           gameID: gameID,
           gameState: GameStates.LOBBY,
@@ -63,16 +54,16 @@ function createGame(socket, io) {
           round: 1,
           users: 1,
           currentTurn: 1
-        })
+        });
 
         NewGame.save((err) => {
           if (err) {
             socket.emit(Events.ERROR, err);
             return;
           }
+
           addUserToGame(userName, gameID, true, userAvatar); 
-            
-            console.log('Adding user to game');
+
             socket.join(gameID);
 
             Info.getGameInfo(gameID, (gameInfo) => {
@@ -85,9 +76,9 @@ function createGame(socket, io) {
       }
       else {
         socket.emit(Events.ERROR);
-          return;
-        }
-    })
+        return;
+      }
+    });
   });
 
 // Add other users into the game
@@ -99,12 +90,12 @@ function createGame(socket, io) {
         return;
       }
       if (game == null) {
-          socket.emit(Events.NO_GAME_FOUND, gameID);
-          return;
+        socket.emit(Events.NO_GAME_FOUND, gameID);
+        return;
       }
       if (game.gameState != GameStates.LOBBY) {
-          socket.emit(Events.GAME_IN_PROGRESS, gameID);
-          return;
+        socket.emit(Events.GAME_IN_PROGRESS, gameID);
+        return;
       }
 
       let enrollment = game.users + 1;
@@ -116,7 +107,7 @@ function createGame(socket, io) {
         }
 
         addUserToGame(userName, gameID, false, userAvatar);
-          console.log('Adding user to game');
+          
           socket.join(gameID);
 
           Info.getGameInfo(gameID, (gameInfo) => {
@@ -125,8 +116,8 @@ function createGame(socket, io) {
                 io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
             });
           });
-      })
-    })
+      });
+    });
   });
 }
 

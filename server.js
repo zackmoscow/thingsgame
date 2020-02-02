@@ -35,23 +35,58 @@ Game.deleteMany({}, (err, res) => {});
 
 const server = app.listen(PORT, () => {
     console.log(`🌎  ==> Server now listening on PORT ${PORT}!`);
-
+    
     const io = require('socket.io')(server);
-
+    
     io.on('connection', (socket) => {
-
+        
         try {
             require('./events/GameEnd')(socket, io);
-            require('./events/GameSetup')(socket, io);
-            require('./events/GameStart')(socket, io);
-            require('./events/GetInfo')(socket, io);
-            require('./events/Match')(socket, io);
-            require('./events/NextRound')(socket, io);
-            require('./events/Response')(socket, io);
-            require('./events/SubmitPrompt')(socket, io);           
+        } catch (err) {
+            console.log("Server error GameEnd: " + err);
         }
-        catch (err) {
-            console.log("Server error: " + err);
+        
+        try {
+            require('./events/GameSetup')(socket, io);
+        } catch (err) {
+            console.log("Server error GameSetup: " + err);
+        }
+        
+        try {
+            require('./events/GameStart')(socket, io);
+        } catch (err) {
+            console.log("Server error GameStart: " + err);
+        }
+
+        try {
+            require('./events/GetInfo')(socket, io);
+        } catch (err) {
+            console.log("Server error GetInfo: " + err);
+        }
+
+        try {
+            require('./events/Match')(socket, io);
+        } catch (err) {
+            console.log("Server error Match: " + err);
+        }    
+        
+
+        try {
+            require('./events/NextRound')(socket, io);
+        } catch (err) {
+            console.log("Server error NextRound: " + err);
+        }
+
+        try {
+            require('./events/Response')(socket, io);
+        } catch (err) {
+            console.log("Server error Response: " + err);
+        }
+
+        try {
+            require('./events/SubmitPrompt')(socket, io);
+        } catch (err) {
+            console.log("Server error SubmitPrompt: " + err);
         }
     });
 })
