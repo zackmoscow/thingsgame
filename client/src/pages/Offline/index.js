@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./style.css";
 import GameHeader from "../../components/GameHeader";
 import SelectedAvatar from "../../components/SelectedAvatar";
+import ScoreBoard from "../../components/ScoreBoard";
 
 export default function OfflineGame() {
     const [input, setInput] = useState('');
@@ -28,51 +29,51 @@ export default function OfflineGame() {
     const avatarDefaults = {
         Woman1: {
             avatarTemplate: "Woman1",
-            hairColor: "#000000",
-            skinTone: "#8a5d3b", 
-            backgroundColor: "#f76c6c"
+            hairColor: "#2c1111",
+            skinTone: "#fccba8", 
+            backgroundColor: "#008feb"
         },
         Woman2: {
             avatarTemplate: "Woman2",
-            hairColor: "#000000",
-            skinTone: "#8a5d3b", 
-            backgroundColor: "#f76c6c"
+            hairColor: "#b55723",
+            skinTone: "#fccba8", 
+            backgroundColor: "#008feb"
         },
         Woman3: {
             avatarTemplate: "Woman3",
             hairColor: "#000000",
-            skinTone: "#8a5d3b", 
-            backgroundColor: "#f76c6c"
+            skinTone: "#ffebc6", 
+            backgroundColor: "#008feb"
         },
         Woman4: {
             avatarTemplate: "Woman4",
-            hairColor: "#000000",
-            skinTone: "#8a5d3b", 
-            backgroundColor: "#f76c6c"
+            hairColor: "#690004",
+            skinTone: "#fccba8", 
+            backgroundColor: "#008feb"
         },
         Man1: {
             avatarTemplate: "Man1",
-            hairColor: "#000000",
-            skinTone: "#8a5d3b", 
-            backgroundColor: "#f76c6c"
+            hairColor: "#ad874d",
+            skinTone: "#ffebc6", 
+            backgroundColor: "#008feb"
         },
         Man2: {
             avatarTemplate: "Man2",
-            hairColor: "#000000",
+            hairColor: "#2c1111",
             skinTone: "#8a5d3b", 
-            backgroundColor: "#f76c6c"
+            backgroundColor: "#008feb"
         },
         Man3: {
             avatarTemplate: "Man3",
-            hairColor: "#000000",
-            skinTone: "#8a5d3b", 
-            backgroundColor: "#f76c6c"
+            hairColor: "#2c1111",
+            skinTone: "#ffebc6", 
+            backgroundColor: "#008feb"
         },
         Man4: {
             avatarTemplate: "Man4",
             hairColor: "#000000",
-            skinTone: "#8a5d3b", 
-            backgroundColor: "#f76c6c"
+            skinTone: "#ffebc6", 
+            backgroundColor: "#008feb"
         }
 
     }
@@ -184,19 +185,12 @@ export default function OfflineGame() {
                 responses: []
             });
         } else {
-            console.log('congrats the game is over')
-            const updatedGameState = { ...gameState };
-            const roundArray = updatedGameState.participants.sort((a,b) => (a.score > b.score) ? -1 : 1);
             return (
-                console.log('the winner is ',roundArray[0])
-                // <div>
-                //     <p>The game is over,</p>
-                //     <h2>and the winner is...</h2>
-                //     <img src={roundArray[0].avatar} alt={`${roundArray[0].name}'s avatar`}/>
-                //     <h1>{roundArray[0].name}</h1>
-                //     <button onClick={()=>{startGame()}}>New Game</button>
-                //     <button onClick={()=>{endGame()}}>Main Menu</button>
-                // </div>
+                <div className="scoreBoard">
+                    <ScoreBoard {...gameState} />
+                    <a href="/offlineGame">New Game</a>
+                    <a href="/">Main Menu</a>
+                </div>
             )
         }
     }
@@ -280,6 +274,7 @@ export default function OfflineGame() {
                 <SelectedAvatar {...o.avatar} />
                 <h3 className="playerName">{o.name}</h3>
                 <p className="playerScore lvl2">{o.score}</p>
+                <span className="filter"></span>
             </div>
         )
     }
@@ -313,7 +308,7 @@ export default function OfflineGame() {
     }
     function playerRegistration(){
         return (
-            <div className="registration">
+            <div className="registration wrapper">
                 <div className="welcome">
                     <h1 className="logo">Welcome!</h1>
                     <p>Please select an avatar and enter a name for each player</p>
@@ -322,28 +317,36 @@ export default function OfflineGame() {
                     <fieldset className="avatarsFieldset">
                         <legend>Choose an avatar or click <a href="/avatar">here</a> to customize your own</legend>
                         <label className="selectAvatar">
-                            <input type="radio" name="avatar" value={avatar} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Woman1)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
                             <img src="images/avatars/woman1.svg" alt="Select Woman 1 Avatar"/>
                         </label>
                         <label className="selectAvatar">
-                            <input type="radio" name="avatar" value="images/avatars/woman2.svg" onChange={e=> setAvatar(avatar)}/>
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Woman2)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
                             <img src="images/avatars/woman2.svg" alt="Select Woman 2 Avatar"/>
                         </label>
                         <label className="selectAvatar">
-                            <input type="radio" name="avatar" value="images/avatars/woman3.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Woman3)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
                             <img src="images/avatars/woman3.svg" alt="Select Woman 3 Avatar"/>
                         </label>
                         <label className="selectAvatar">
-                            <input type="radio" name="avatar" value="images/avatars/man1.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Woman4)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/woman4.svg" alt="Select Woman 4 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Man1)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
                             <img src="images/avatars/man1.svg" alt="Select Man 1 Avatar"/>
                         </label>
                         <label className="selectAvatar">
-                            <input type="radio" name="avatar" value="images/avatars/man2.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Man2)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
                             <img src="images/avatars/man2.svg" alt="Select Man 2 Avatar"/>
                         </label>
                         <label className="selectAvatar">
-                            <input type="radio" name="avatar" value="images/avatars/man3.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Man3)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
                             <img src="images/avatars/man3.svg" alt="Select Man 3 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Man4)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/man4.svg" alt="Select Man 4 Avatar"/>
                         </label>
                     </fieldset>
                     <fieldset className="participantFieldset">
@@ -365,7 +368,7 @@ export default function OfflineGame() {
     }
     function gameBoard() {
         return (
-            <div className="gameBoard wrapper">
+            <div className="gameBoard">
                 <GameHeader {...roundState}/>
                 <div className="responseArea">
                     {getAnswers()}

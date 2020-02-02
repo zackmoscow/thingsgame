@@ -1,8 +1,16 @@
 .headerArea {
+    padding:1em 2em;
     text-transform: capitalize;
 }
 .headerArea span {
     color: #f76c6c;
     display:block;
     font-size:.5em;
+}
+.leftHeader {
+    float:left;
+}
+.rightHeader {
+    float: right;
+    text-align:right;
 }
