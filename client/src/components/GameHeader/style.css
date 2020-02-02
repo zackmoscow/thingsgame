@@ -1,3 +1,6 @@
+.headerArea {
+    text-transform: capitalize;
+}
 .headerArea span {
     color: #f76c6c;
     display:block;

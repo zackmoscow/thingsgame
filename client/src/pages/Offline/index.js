@@ -23,74 +23,7 @@ export default function OfflineGame() {
         setGameState({
             gameId: 5564,
             isReady: false,
-            participants: [
-                // {
-                //     id: 1,
-                //     name: "Cathy", 
-                //     avatar: "images/avatars/woman1.svg",
-                //     score: 0, 
-                //     position: 0,
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: true
-                // },
-                // {
-                //     id: 2,
-                //     name: "Mark", 
-                //     avatar: "images/avatars/man1.svg",
-                //     score: 0, 
-                //     position: 1,
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: true,
-                //     promptmaster: false
-                // },
-                // {
-                //     id: 3,
-                //     name: "Karen", 
-                //     avatar: "images/avatars/woman2.svg",
-                //     score: 0, 
-                //     position: 2,
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: false
-                // },
-                // {
-                //     id: 4,
-                //     name: "Scottie", 
-                //     avatar: "images/avatars/man2.svg",
-                //     score: 0,
-                //     position: 3, 
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: false
-                // },
-                // {
-                //     id: 5,
-                //     name: "Margaret", 
-                //     avatar: "images/avatars/woman3.svg",
-                //     score: 0, 
-                //     position: 4, 
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: false
-                // },
-                // {
-                //     id: 6,
-                //     name: "Dave", 
-                //     avatar: "images/avatars/man3.svg",
-                //     score: 0, 
-                //     position: 5, 
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: false
-                // }
-            ]
+            participants: []
         });
     },[]);
     function seeState() {
@@ -321,7 +254,7 @@ export default function OfflineGame() {
         return (
             <div className="registration">
                 <div className="welcome">
-                    <h1>Welcome!</h1>
+                    <h1 className="logo">Welcome!</h1>
                     <p>Please select an avatar and enter a name for each player</p>
                 </div>
                 <form>
@@ -366,13 +299,12 @@ export default function OfflineGame() {
                     <span className="submitOr">or</span>
                     <button className="startGameBtn" onClick={()=>startGame()}>Start Game</button>
                 </form>
-                <button onClick={()=>seeState()}>See State</button>
             </div>
         )
     }
     function gameBoard() {
         return (
-            <div className="gameBoard">
+            <div className="gameBoard wrapper">
                 <GameHeader {...roundState}/>
                 <div className="responseArea">
                     {getAnswers()}
