@@ -21,11 +21,12 @@ exports.getGameInfo = (gameID, cb) => {
       round: game.round,
       users: game.users,
       allUsers: game.allUsers,
-      hasWent: game.hasWent
+      hasWent: game.hasWent,
+      gameWinner: game.gameWinner
     };
     cb(gameInfo);
   });
-};
+}
 
 // then findOne for Game, find all Users in each game, loop through all users and callback info for all
 
@@ -50,11 +51,10 @@ exports.getUserInfo = (gameID, cb) => {
           turn: user.turn,
           wins: user.wins,
           avatar: user.avatar,
-          gameWinner: user.gameWinner,
           promptMaster: user.promptMaster
         };
       });
       cb(userInfo);
     });
   });
-};
+}

@@ -18,7 +18,6 @@ export default function Lobby() {
         dispatch(startRound(gameInfo.gameID));
     }
     
-
     return (
       <div className='gameBoard'>
         <div className='headerArea'>
@@ -26,6 +25,7 @@ export default function Lobby() {
             <h2>Number of Players: {gameInfo.users}</h2>
         </div>
         <div className='responseArea'>
+          <p>You may start the game when there are at least 4 players...</p>
         </div>
         <div className='playerArea'>
           {getUsers()}

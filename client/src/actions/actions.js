@@ -101,8 +101,8 @@ export function gameEnd(gameID) {
   }
 }
 
-export function returnToLobby(gameID) {
+export function returnToTitle(gameID) {
   return (dispatch) => {
-    socket.emit('returnToLobby', gameID)
+    socket.emit('returnToTitle', gameID)
   }
 }

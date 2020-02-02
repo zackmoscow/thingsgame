@@ -79,9 +79,11 @@ export default function Match() {
 
     function getResponses() {
         let responseList = [];
-        turnUserInfoIntoArray().map(user => 
-            responseList.push(user.response)    
-        );
+        turnUserInfoIntoArray().map(user => {
+            if (user.state !== 'eliminated') {
+              responseList.push(user.response)  
+            }  
+        });
         shuffle(responseList);
         return responseList.map(response => (
             <p className="response" key={response} id={response} draggable onDragStart={e=>onDragStart(e, response)}>{response}</p>

@@ -5,16 +5,16 @@ const Game = require('../models/game');
 const User = require('../models/user');
 const Info = require('./GetInfo');
 
-function returnToLobby(socket, io) {
+function returnToTitle(socket, io) {
 
-  socket.on(Events.RETURN_TO_LOBBY, (gameID) => {
+  socket.on(Events.RETURN_TO_TITLE, (gameID) => {
 
       Game.updateOne({ gameID: gameID }, { gameState: GameStates.LOBBY, prompt: '' }, (err, res) => {
         if (err) {
           socket.emit(Events.ERROR, err);
           return;
         }
-        User.updateMany({ gameID: gameID }, { state: UserStates.LOBBY, response: '' }, (err, res) => {
+        User.updateMany({ gameID: gameID }, { state: UserStates.LOBBY, gameID: '', response: '' }, (err, res) => {
           if (err) {
             socket.emit(Events.ERROR, err);
             return;
@@ -29,4 +29,4 @@ function returnToLobby(socket, io) {
     })
 }
 
-module.exports = returnToLobby;
+module.exports = returnToTitle;

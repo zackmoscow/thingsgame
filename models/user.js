@@ -36,10 +36,6 @@ const UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  gameWinner: {
-    type: Boolean,
-    default: false
-  },
   avatar: String,
   socketID: String
   
