@@ -189,7 +189,7 @@ export default function Title() {
     }
 
     return (
-        <section className="titleScreen">
+        <section className="titleScreen wrapper">
             <Logo />
             {isLoggedIn()}
             {showForm()}
