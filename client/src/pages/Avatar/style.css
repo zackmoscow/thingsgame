@@ -4,6 +4,9 @@
     padding:1em;
     width:33.33%;
 }
+.choosePhoto img {
+    cursor: pointer;
+}
 .selectedAvatar {
     float:left;
     padding:2em;
