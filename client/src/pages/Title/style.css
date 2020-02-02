@@ -11,10 +11,53 @@ button {
     display:inline-block;
     margin:0 1em 0 0;
 }
+.loginModal {
+    overflow:hidden;
+    padding-right:1em;
+    position:relative;
+}
+.closed {
+    max-height:0;
+}
+.open {
+    max-height: 700px;
+}
+.open ~ .localGameBtn {
+    opacity: .1;
+}
+.closeBtn {
+    background: #f76c6c;
+    border: none;
+    border-radius: 50%;
+    height: 2em;
+    line-height: 1em;
+    margin: 0;
+    padding: .5em;
+    width: 2em;
+    position: absolute;
+    top: 1em;
+    right: 0;
+}
 .loginFormDiv {
     margin-bottom:2em;
 }
-#loginSubmit, #signup, #offlineGameInit {
+.loginFormDiv h1 {
+    display:inline-block;
+}
+#signout {
+    background:none;
+    border:none;
+    box-shadow:initial;
+    color:#f76c6c;
+    font-size:.75em;
+    margin-left:1em;
+    padding:0;
+    text-decoration: underline;
+}
+#signout:focus {
+    outline:none;
+}
+#loginSubmit, #signup, #offlineGameInit, #onlineLoginModal {
     background: #f76c6c;
     border: none;
     color: #000;
@@ -48,14 +91,6 @@ button {
     display:inline-block;
     padding:1em 0;
 }
-
 .userAvatar {
     width: 200px;
-}
-#signout {
-    padding:1em 2em;
-    position: fixed;
-    bottom:1em;
-    left:50%;
-    transform:translateX(-50%);
 }
