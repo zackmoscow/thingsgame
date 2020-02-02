@@ -1,0 +1,25 @@
+.choosePhoto {
+    column-count: 2;
+    float:left;
+    padding:1em;
+    width:33.33%;
+}
+.choosePhoto img {
+    cursor: pointer;
+}
+.selectedAvatar {
+    float:left;
+    padding:2em;
+    width:66.66%;
+}
+.selectedAvatar button {
+    border:none;
+    border-radius: 50%;
+    height:3em;
+    width:3em;
+}
+.selectedAvatar .saveBtn {
+    border-radius: initial;
+    height:initial;
+    width:initial;
+}

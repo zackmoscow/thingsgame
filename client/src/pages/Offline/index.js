@@ -1,93 +1,89 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import GameHeader from "../../components/GameHeader";
-import OfflineGameStart from "../../components/OfflineGameStart";
-import Players from "../../components/Players";
-import ActionBtns from "../../components/ActionBtns";
+import SelectedAvatar from "../../components/SelectedAvatar";
+import ScoreBoard from "../../components/ScoreBoard";
 
 export default function OfflineGame() {
     const [input, setInput] = useState('');
-    const [participantName, setParticipantName] = useState('');
-    const [gameState, setGameState] = useState({});
+    const [avatar, setAvatar] = useState({
+        avatarTemplate: "Man3",
+        hairColor: "#000000",
+        skinTone: "#8a5d3b", 
+        backgroundColor: "#f76c6c"
+    });
+    const [gameState, setGameState] = useState({
+        gameId: null,
+        isReady: false,
+        participants: []
+    });
     const [roundState, setRoundState] = useState({
         round: 1,
         promptmaster: {},
         matcher: {},
         players: [],
         roundQuestion: "",
-        //responses: []
     });
+    const [position, setPosition] = useState(0);
+
+    const avatarDefaults = {
+        Woman1: {
+            avatarTemplate: "Woman1",
+            hairColor: "#2c1111",
+            skinTone: "#fccba8", 
+            backgroundColor: "#008feb"
+        },
+        Woman2: {
+            avatarTemplate: "Woman2",
+            hairColor: "#b55723",
+            skinTone: "#fccba8", 
+            backgroundColor: "#008feb"
+        },
+        Woman3: {
+            avatarTemplate: "Woman3",
+            hairColor: "#000000",
+            skinTone: "#ffebc6", 
+            backgroundColor: "#008feb"
+        },
+        Woman4: {
+            avatarTemplate: "Woman4",
+            hairColor: "#690004",
+            skinTone: "#fccba8", 
+            backgroundColor: "#008feb"
+        },
+        Man1: {
+            avatarTemplate: "Man1",
+            hairColor: "#ad874d",
+            skinTone: "#ffebc6", 
+            backgroundColor: "#008feb"
+        },
+        Man2: {
+            avatarTemplate: "Man2",
+            hairColor: "#2c1111",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#008feb"
+        },
+        Man3: {
+            avatarTemplate: "Man3",
+            hairColor: "#2c1111",
+            skinTone: "#ffebc6", 
+            backgroundColor: "#008feb"
+        },
+        Man4: {
+            avatarTemplate: "Man4",
+            hairColor: "#000000",
+            skinTone: "#ffebc6", 
+            backgroundColor: "#008feb"
+        }
+
+    }
+
+
     useEffect(()=> {
         setGameState({
             gameId: 5564,
-            participants: [
-                // {
-                //     id: 1,
-                //     name: "Cathy", 
-                //     avatar: "images/avatars/woman1.svg",
-                //     score: 0, 
-                //     position: 0,
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: true
-                // },
-                // {
-                //     id: 2,
-                //     name: "Mark", 
-                //     avatar: "images/avatars/man1.svg",
-                //     score: 0, 
-                //     position: 1,
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: true,
-                //     promptmaster: false
-                // },
-                // {
-                //     id: 3,
-                //     name: "Karen", 
-                //     avatar: "images/avatars/woman2.svg",
-                //     score: 0, 
-                //     position: 2,
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: false
-                // },
-                // {
-                //     id: 4,
-                //     name: "Scottie", 
-                //     avatar: "images/avatars/man2.svg",
-                //     score: 0,
-                //     position: 3, 
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: false
-                // },
-                // {
-                //     id: 5,
-                //     name: "Margaret", 
-                //     avatar: "images/avatars/woman3.svg",
-                //     score: 0, 
-                //     position: 4, 
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: false
-                // },
-                // {
-                //     id: 6,
-                //     name: "Dave", 
-                //     avatar: "images/avatars/man3.svg",
-                //     score: 0, 
-                //     position: 5, 
-                //     response:"",
-                //     isEliminated: false,
-                //     matcher: false,
-                //     promptmaster: false
-                // }
-            ]
+            isReady: false,
+            participants: []
         });
     },[]);
     function seeState() {
@@ -99,9 +95,9 @@ export default function OfflineGame() {
         const enteredParticipants = [...participants];
         let newParticipant = {
             name: input, 
-            avatar: "images/avatars/woman1.svg",
-            score: 0, 
-            position: 0,
+            avatar: avatar,
+            score: 0,
+            position,
             response:"",
             isEliminated: false,
             matcher: false,
@@ -111,11 +107,20 @@ export default function OfflineGame() {
         setGameState({
             ...gameState,
             participants: enteredParticipants
-        })
+        });
+        setPosition(position + 1);
         console.log(gameState);
     }
     function startGame(){
-        console.log('start game')
+        console.log('start game');
+        const { participants } = { ...gameState };
+        const updatedParticipants = [...participants];
+        updatedParticipants[0].promptmaster = true;
+        updatedParticipants[1].matcher = true;
+        setGameState({
+            ...gameState,
+            isReady:true
+        })
     }
     function startRound() {
         if(gameState.participants) {
@@ -180,19 +185,12 @@ export default function OfflineGame() {
                 responses: []
             });
         } else {
-            console.log('congrats the game is over')
-            const updatedGameState = { ...gameState };
-            const roundArray = updatedGameState.participants.sort((a,b) => (a.score > b.score) ? -1 : 1);
             return (
-                console.log('the winner is ',roundArray[0])
-                // <div>
-                //     <p>The game is over,</p>
-                //     <h2>and the winner is...</h2>
-                //     <img src={roundArray[0].avatar} alt={`${roundArray[0].name}'s avatar`}/>
-                //     <h1>{roundArray[0].name}</h1>
-                //     <button onClick={()=>{startGame()}}>New Game</button>
-                //     <button onClick={()=>{endGame()}}>Main Menu</button>
-                // </div>
+                <div className="scoreBoard">
+                    <ScoreBoard {...gameState} />
+                    <a href="/offlineGame">New Game</a>
+                    <a href="/">Main Menu</a>
+                </div>
             )
         }
     }
@@ -269,11 +267,14 @@ export default function OfflineGame() {
             playerClass = "player eliminated";
             dragEvents = {};
         }
+        console.log(o.avatar)
         return(
             <div className={playerClass} key={o.id} id={o.name} {...dragEvents}>
-                <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/>
+                {/* <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/> */}
+                <SelectedAvatar {...o.avatar} />
                 <h3 className="playerName">{o.name}</h3>
                 <p className="playerScore lvl2">{o.score}</p>
+                <span className="filter"></span>
             </div>
         )
     }
@@ -305,36 +306,83 @@ export default function OfflineGame() {
             }
         }
     }
-    return (
-        <div className="registration">
-            <form>
-                <fieldset>
-                    <input type="name" id="participantName" value={input} onChange={e=> setInput(e.target.value)} />
-                    <label for="participantName">Enter your name</label>
-                </fieldset>
-                <button type="submit" id="createParticipant" onClick={(e)=>{
-                    e.preventDefault();
-                    createParticipant(input)
-                }}>Create Player</button>
-            </form>
-            <button onClick={()=>startGame()}>Start Game</button>
-            <button onClick={()=>seeState()}>See State</button>
-        </div>
-        // <div className="gameBoard">
-        //     <GameHeader {...roundState}/>
-        //     <div className="responseArea">
-        //         {getAnswers()}
-        //     </div>
-        //     <div className="playerArea">
-        //         {getPlayers()}
-        //         {/* <Players {...gameState} /> */}
-        //     </div>
-        //     {/* <ActionBtns /> */}
-        //     <div className="actions">
-        //         <button onClick={()=>startRound()}>Start Round</button>
-        //         <button onClick={()=>endRound()}>End Round</button>
-        //         <button onClick={()=>seeState()}>See State</button>
-        //     </div>
-        // </div>
-    )
+    function playerRegistration(){
+        return (
+            <div className="registration wrapper">
+                <div className="welcome">
+                    <h1 className="logo">Welcome!</h1>
+                    <p>Please select an avatar and enter a name for each player</p>
+                </div>
+                <form>
+                    <fieldset className="avatarsFieldset">
+                        <legend>Choose an avatar or click <a href="/avatar">here</a> to customize your own</legend>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Woman1)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/woman1.svg" alt="Select Woman 1 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Woman2)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/woman2.svg" alt="Select Woman 2 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Woman3)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/woman3.svg" alt="Select Woman 3 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Woman4)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/woman4.svg" alt="Select Woman 4 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Man1)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/man1.svg" alt="Select Man 1 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Man2)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/man2.svg" alt="Select Man 2 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Man3)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/man3.svg" alt="Select Man 3 Avatar"/>
+                        </label>
+                        <label className="selectAvatar">
+                            <input type="radio" name="avatar" value={JSON.stringify(avatarDefaults.Man4)} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
+                            <img src="images/avatars/man4.svg" alt="Select Man 4 Avatar"/>
+                        </label>
+                    </fieldset>
+                    <fieldset className="participantFieldset">
+                        <input type="name" id="participantName" value={input} onChange={e=> setInput(e.target.value)}  required/>
+                        <label for="participantName">Enter your name</label>
+                    </fieldset>
+                    <button type="submit" id="createParticipant" onClick={(e)=>{
+                        e.preventDefault();
+                        if ( input && avatar ) {
+                            createParticipant(input);
+                            setInput('');
+                        }
+                    }}>Create Player</button>
+                    <span className="submitOr">or</span>
+                    <button className="startGameBtn" onClick={()=>startGame()}>Start Game</button>
+                </form>
+            </div>
+        )
+    }
+    function gameBoard() {
+        return (
+            <div className="gameBoard">
+                <GameHeader {...roundState}/>
+                <div className="responseArea">
+                    {getAnswers()}
+                </div>
+                <div className="playerArea">
+                    {getPlayers()}
+                </div>
+                <div className="actions">
+                    <button onClick={()=>startRound()}>Start Round</button>
+                    <button onClick={()=>endRound()}>End Round</button>
+                    <button onClick={()=>seeState()}>See State</button>
+                </div>
+            </div>
+        )
+    }
+    return (gameState.isReady) ? gameBoard() : playerRegistration()
 }

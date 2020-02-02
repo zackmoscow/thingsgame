@@ -6,9 +6,15 @@ import {UserContext} from '../../utils/UserContext';
 import SelectAvatar from '../../components/SelectAvatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { newGame, joinGame, setError } from '../../actions/actions';
+import Logo from "../../components/Logo";
 
 export default function Title() {
-    const {userName, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated} = useContext(UserContext);
+
+    const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated, getUser} = useContext(UserContext);
+    const [loginModal, setLoginModal] = useState({ 
+        isOpen: false,
+        playerClass: "loginModal closed"
+    });
     const [inputType, setInputType] = useState("password");
     const [loginError, setLoginError] = useState(null);
     const [signupError, setSignupError] = useState(null);
@@ -88,8 +94,9 @@ export default function Title() {
         if(isAuthenticated){
             
             return(
-                <div>
+                <div className="loginFormDiv">
                     <h1>Welcome, {userName}!</h1>
+                    <button id="signout" onClick={() => changeAuthenticated('', '')}>Not You?</button>
                     <p>Current game:</p>
                     {copyBtn()}
 
@@ -98,7 +105,7 @@ export default function Title() {
                     {showAvatars()}
                     </div>
 
-                    <button id="signout" onClick={() => changeAuthenticated('', '')}>Not You? Switch Users</button>
+                    
                     {/* <a id="createOnlineGame" href="/onlinegame">Create Game</a>
                     <a id="joinOnlineGame" href="/onlinegame">Join Game</a> */}
                     <button id="createOnlineGame" onClick={(e)=>newOnlineGame(e)}>Create New Game</button>
@@ -118,7 +125,7 @@ export default function Title() {
     function showForm(){
         if(!isAuthenticated){
             return (
-            <div>
+            <div className="loginFormDiv">
                 <div id="errors">
                 {loginError || signupError}
                 </div>
@@ -139,7 +146,7 @@ export default function Title() {
                         onChange={()=>{
                             setLoginError(null) 
                             setSignupError(null)
-                            }} 
+                            }}
                         id="password" 
                         ref={pwInput} 
                         required/>
@@ -186,13 +193,37 @@ export default function Title() {
     function gameIDChange(e) {
         setGameIDInput(e.target.value);
     }
-
+    function showLoginModal(){
+        if(loginModal.isOpen) {
+            setLoginModal({
+                ...loginModal,
+                isOpen: false,
+                playerClass: "loginModal closed"
+            });
+        } else {
+            setLoginModal({
+                ...loginModal,
+                isOpen: true,
+                playerClass: "loginModal open"
+            })
+        }
+    }
     return (
-        <section className="titleScreen">
-            {isLoggedIn()}
-            {showForm()}
+        <section className="titleScreen wrapper">
+            <Logo />
+            <div className={loginModal.playerClass}>
+                {isLoggedIn()}
+                {showForm()}
+                <button onClick={()=> showLoginModal()} className="closeBtn">X</button>
+            </div>
+
+            <div className="localGameBtn">
+                <button id="onlineLoginModal" onClick={()=>showLoginModal()}>Play Online</button>
+                <span className="submitOr">or</span>
+                <a id="offlineGameInit" href="/offlinegame">Play Offline</a>
+                {/* <a id="avatarCustomization" href="/avatar">Customize Avatar</a> */}
+            </div>
             {redirect && <Redirect to="/onlineGame" />}
-            <a id="offlineGameInit" href="/offlinegame">Start Local Game</a>
         </section>
     )
 }
