@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import GameHeader from "../../components/GameHeader";
+import SelectedAvatar from "../../components/SelectedAvatar";
 
 export default function OfflineGame() {
     const [input, setInput] = useState('');
-    const [avatar, setAvatar] = useState('');
+    const [avatar, setAvatar] = useState({
+        avatarTemplate: "Man3",
+        hairColor: "#000000",
+        skinTone: "#8a5d3b", 
+        backgroundColor: "#f76c6c"
+    });
     const [gameState, setGameState] = useState({
         gameId: null,
         isReady: false,
@@ -16,9 +22,62 @@ export default function OfflineGame() {
         matcher: {},
         players: [],
         roundQuestion: "",
-        //responses: []
     });
     const [position, setPosition] = useState(0);
+
+    const avatarDefaults = {
+        Woman1: {
+            avatarTemplate: "Woman1",
+            hairColor: "#000000",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#f76c6c"
+        },
+        Woman2: {
+            avatarTemplate: "Woman2",
+            hairColor: "#000000",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#f76c6c"
+        },
+        Woman3: {
+            avatarTemplate: "Woman3",
+            hairColor: "#000000",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#f76c6c"
+        },
+        Woman4: {
+            avatarTemplate: "Woman4",
+            hairColor: "#000000",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#f76c6c"
+        },
+        Man1: {
+            avatarTemplate: "Man1",
+            hairColor: "#000000",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#f76c6c"
+        },
+        Man2: {
+            avatarTemplate: "Man2",
+            hairColor: "#000000",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#f76c6c"
+        },
+        Man3: {
+            avatarTemplate: "Man3",
+            hairColor: "#000000",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#f76c6c"
+        },
+        Man4: {
+            avatarTemplate: "Man4",
+            hairColor: "#000000",
+            skinTone: "#8a5d3b", 
+            backgroundColor: "#f76c6c"
+        }
+
+    }
+
+
     useEffect(()=> {
         setGameState({
             gameId: 5564,
@@ -214,9 +273,11 @@ export default function OfflineGame() {
             playerClass = "player eliminated";
             dragEvents = {};
         }
+        console.log(o.avatar)
         return(
             <div className={playerClass} key={o.id} id={o.name} {...dragEvents}>
-                <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/>
+                {/* <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/> */}
+                <SelectedAvatar {...o.avatar} />
                 <h3 className="playerName">{o.name}</h3>
                 <p className="playerScore lvl2">{o.score}</p>
             </div>
@@ -259,13 +320,13 @@ export default function OfflineGame() {
                 </div>
                 <form>
                     <fieldset className="avatarsFieldset">
-                        <legend>Choose an avatar</legend>
+                        <legend>Choose an avatar or click <a href="/avatar">here</a> to customize your own</legend>
                         <label className="selectAvatar">
-                            <input type="radio" name="avatar" value="images/avatars/woman1.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <input type="radio" name="avatar" value={avatar} onChange={e=> setAvatar(JSON.parse(e.target.value))}/>
                             <img src="images/avatars/woman1.svg" alt="Select Woman 1 Avatar"/>
                         </label>
                         <label className="selectAvatar">
-                            <input type="radio" name="avatar" value="images/avatars/woman2.svg" onChange={e=> setAvatar(e.target.value)}/>
+                            <input type="radio" name="avatar" value="images/avatars/woman2.svg" onChange={e=> setAvatar(avatar)}/>
                             <img src="images/avatars/woman2.svg" alt="Select Woman 2 Avatar"/>
                         </label>
                         <label className="selectAvatar">
