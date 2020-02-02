@@ -19,7 +19,9 @@ exports.getGameInfo = (gameID, cb) => {
       prompt: game.prompt,
       promptMaster: game.promptMaster,
       round: game.round,
-      users: game.users
+      users: game.users,
+      allUsers: game.allUsers,
+      hasWent: game.hasWent
     };
     cb(gameInfo);
   });
@@ -48,7 +50,8 @@ exports.getUserInfo = (gameID, cb) => {
           turn: user.turn,
           wins: user.wins,
           avatar: user.avatar,
-          gameWinner: user.gameWinner
+          gameWinner: user.gameWinner,
+          promptMaster: user.promptMaster
         };
       });
       cb(userInfo);

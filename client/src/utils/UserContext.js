@@ -1,74 +1,51 @@
-import React, {Component, createContext} from 'react';
+import React, { useEffect, useState, createContext } from 'react';
 import Axios from 'axios';
 
 export const UserContext = createContext();
 
-export default class UserProvider extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      token: localStorage.getItem('thingsAuthToken') || null,
-      isAuthenticated: (localStorage.getItem('thingsAuthToken') ? true : false),
-      userId: localStorage.getItem('thingsUserId') || '',
-      userName: 'Set Your Username!',
-      userWins: 0,
-      userAvatar: ''
-    }
-    this.changeUserName = this.changeUserName.bind(this);
-    this.changeAvatar = this.changeAvatar.bind(this);
-    this.changeWins = this.changeWins.bind(this);
-    this.changeAuthenticated = this.changeAuthenticated.bind(this);
-    this.changeUserId = this.changeUserId.bind(this);
-    this.changeToken = this.changeToken.bind(this);
-    this.getUser = this.getUser.bind(this);
-    this.updateUser = this.updateUser.bind(this);
-  }
-  changeUserName(a){
-    this.setState({...this.state, userName: a})
-  }
-  changeAvatar(a){
-    this.setState({...this.state, userAvatar: a})
-    this.updateUser({...this.state, userAvatar: a}, this.state.userId, this.state.token)
-  }
-  changeWins(a){
-    this.setState({...this.state, userWins: (this.state.userWins + a)})
-    this.updateUser({...this.state, wins: (this.state.userWins + a)}, this.state.userId, this.state.token)
-  }
-  changeAuthenticated(token,userId){
-    if(this.state.isAuthenticated === true){
-      localStorage.removeItem('thingsAuthToken')
-      this.setState({
-        ...this.state,
-        userName: '',
-        token: '',
-        userId: '',
-        userWins: 0,
-        userAvatar: '',
-        isAuthenticated: false
-      });
+export default function UserProvider(props) {
+  const [token, setToken] = useState(localStorage.getItem('thingsAuthToken') || null);
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('thingsAuthToken') ? true : false);
+  const [userId, setUserId] = useState(localStorage.getItem('thingsUserId') || '');
+  const [userName, setUserName] = useState('Set Your Username!');
+  const [userWins, setUserWins] = useState(0);
+  const [userAvatar, setUserAvatar] = useState('');
+
+  const changeAvatar = (avatar) => {
+    setUserAvatar(avatar);
+  };
+
+  const changeAuthenticated = (token, userId) => {
+    if(isAuthenticated === true){
+      localStorage.removeItem('thingsAuthToken');
+      setToken('');
+      setUserName('');
+      setUserId('');
+      setUserId(0);
+      setUserAvatar('');
+      setIsAuthenticated(false);
     } else {
-      localStorage.setItem('thingsAuthToken', token)
+      localStorage.setItem('thingsAuthToken', token);
       // i'm setting the userId in it's own setter bc then I can save it in localStorage
-      this.changeUserId(userId);
-      this.setState({
-        ...this.state,
-        isAuthenticated: true,
-        token
-      });
-      this.getUser(token, userId);
+      changeUserId(userId);
+      setIsAuthenticated(true);
+      setToken(token);
+      getUser(token, userId);
     }
-  }
-  changeToken(a){
-    this.setState({...this.state, token: a})
-    localStorage.setItem('thingsAuthToken', a)
-  }
-  changeUserId(a){
-    this.setState({...this.state, userId: a})
-    localStorage.setItem('thingsUserId', a)
-  }
+  };
+
+  const changeToken = (token) => {
+    setToken(token);
+    localStorage.setItem('thingsAuthToken', token);
+  };
+
+  const changeUserId = (id) => {
+    setUserId(id);
+    localStorage.setItem('thingsUserId', id);
+  };
 
   //gets the user info from the db. This is called as soon as the user is authenticated.
-  getUser(token, id){
+  const getUser = (token, id) => {
     Axios.get(`/user/${id}`, {
       headers: {
         'Content-type': 'application/json',
@@ -77,49 +54,47 @@ export default class UserProvider extends Component {
     })
     .then(result => {
       const {wins, userName, avatar} = result.data;
-      this.changeUserName(userName);
-      this.changeWins(wins);
-      this.changeAvatar(avatar);
+      setUserName(userName);
+      setUserWins(wins);
+      setUserAvatar(avatar);
     })
     .catch(err => console.log(err));
   };
-  //updates the user in the db
-  updateUser(obj, id, token){
+
+  useEffect(() => {
+    if(userId && token) getUser(token, userId); 
+  },[]);
+
+  useEffect(() => {
+    //updates the user in the db
     const inputData = {
-      userName: obj.userName,
-      wins: obj.userWins,
-      avatar: obj.userAvatar
+      userName,
+      wins: userWins,
+      avatar: userAvatar
     }
-    Axios.put(`/user/${id}`, inputData, {
+    Axios.put(`/user/${userId}`, inputData, {
       headers: {
         'Content-type': 'application/json',
         'x-auth-token': token
       }
     })
-    .then(()=>{});
-  }
+    .then(() => {});
+  },[userWins, userAvatar]);
 
-  componentDidMount(){
-    if(this.state.userId && this.state.token) this.getUser(this.state.token, this.state.userId); 
-  }
-  
-
-
-  render(){
-    return(
-      <UserContext.Provider 
-        value={{...this.state, 
-        changeAuthenticated: this.changeAuthenticated, 
-        changeToken: this.changeToken,
-        changeUserId: this.changeUserId,
-        changeAvatar: this.changeAvatar,
-        getUser: this.getUser
-      }}
-      >
-
-        {this.props.children}
-
-      </UserContext.Provider>
-    );
-  }
+  return(
+    <UserContext.Provider 
+      value={{ 
+      changeAuthenticated, 
+      changeToken,
+      changeUserId,
+      changeAvatar,
+      getUser,
+      userName,
+      userAvatar,
+      isAuthenticated
+    }}
+    >
+      {props.children}
+    </UserContext.Provider>
+  );
 }

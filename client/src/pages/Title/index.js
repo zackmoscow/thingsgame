@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { newGame, joinGame, setError } from '../../actions/actions';
 
 export default function Title() {
-    const {userName, userWins, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated, getUser} = useContext(UserContext);
+    const {userName, userAvatar, changeAvatar, isAuthenticated, changeAuthenticated} = useContext(UserContext);
     const [inputType, setInputType] = useState("password");
     const [loginError, setLoginError] = useState(null);
     const [signupError, setSignupError] = useState(null);

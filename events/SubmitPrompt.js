@@ -6,9 +6,9 @@ const User = require('../models/user');
 const Info = require('./GetInfo');
 
 function submitPrompt(socket, io) {
-
+  console.log("RUNNING SUBMIT PROMPT!");
   socket.on(Events.SUBMITTED_PROMPT, (gameID, prompt) => {
-    
+    console.log("Events.SUBMITTED_PROMPT", gameID, prompt);
     // Capture and trim passed in prompt
 
     prompt = prompt.trim();
@@ -36,7 +36,7 @@ function submitPrompt(socket, io) {
 
             // Update all user states to noResponse
 
-            User.updateMany({ gameID: gameID }, { state: UserStates.NORESPONSE, response: '' }, (err, res) => {
+            User.updateMany({ gameID: gameID }, { state: UserStates.NO_RESPONSE, response: '' }, (err, res) => {
               if (err) {
                 socket.emit(Events.ERROR, err);
                 return;

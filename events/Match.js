@@ -11,36 +11,40 @@ function match(socket, io) {
   const matchTurn = {
     allUsers: [],
     hasWent: [],
-    allowed: function() {
-      return shuffle(this.allUsers.filter(o => o !== hasWent.includes(o)))
-    }
   };
+
+  function allowed() {
+    return shuffle(matchTurn.allUsers.filter(o => o !== matchTurn.hasWent.includes(o)))
+  }
+
 
   socket.on(Events.MATCHED, (gameID, userName, match) => {
     User.findOne({ gameID: gameID, userName: match.name, response: match.response }, (err, user) => {
+      console.log('user', user);
       if (err) {
         socket.emit(Events.ERROR, err);
         return;
       }
       if (user == null) {
-        User.findOneAndUpdate({ gameID: gameID, userName: userName }, { state: UserStates.INLINE }, (err, user) => {
+        User.findOneAndUpdate({ gameID: gameID, userName: userName }, { state: UserStates.INLINE }, (err, u) => {
           if (err) {
             socket.emit(Events.ERROR, err);
             return;
           }
-          matchTurn.hasWent.push(user._id);
 
-          User.find({ gameID: gameID, promptMaster: false }), (err, users) => {
+          matchTurn.hasWent.push(u._id);
+
+          User.find({ gameID: gameID, promptMaster: false }, (err, users) => {
             if (err) {
               socket.emit(Events.ERROR, err);
               return;
             }
             matchTurn.allUsers = users.map(o => o._id);
 
-            const allowed = matchTurn.allowed();
+            const allowedArray = allowed();
             
-            if (allowed.length > 0) {
-              User.findOneAndUpdate({ gameID: gameID, _id: allowed[0] }, { state: UserStates.MATCHING }, (err, user) => {
+            if (allowedArray.length > 0) {
+              User.findOneAndUpdate({ gameID: gameID, _id: allowedArray[0] }, { state: UserStates.MATCHING }, (err, user) => {
                 if (err) {
                   socket.emit(Events.ERROR, err);
                   return;
@@ -53,9 +57,9 @@ function match(socket, io) {
               })
             }
 
-            if (allowed.length == 0) {
+            if (allowedArray.length == 0) {
               matchTurn.hasWent = [];
-              const allowed = matchTurn.allowed();
+              const allowed = shuffle(matchTurn.allUsers);
               User.findOneAndUpdate({ gameID: gameID, _id: allowed[0] }, { state: UserStates.MATCHING }, (err, user) => {
                 if (err) {
                   socket.emit(Events.ERROR, err);
@@ -68,7 +72,7 @@ function match(socket, io) {
                 });
               })
             }
-          }
+          })
         })
       }
       else {
@@ -87,7 +91,7 @@ function match(socket, io) {
               socket.emit(Events.ERROR, err);
               return;
             }
-            if (users.length < 2) {
+            if (users.length < 3) {
               Game.updateOne({ gameID: gameID }, { gameState: GameStates.ROUND_RESULTS }, (err, res) => {
                 if (err) {
                   socket.emit(Events.ERROR, err);

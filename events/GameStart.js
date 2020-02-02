@@ -7,6 +7,8 @@ const Info = require('./GetInfo');
 
 function startGame(socket, io) {
 
+  console.log('RUNNING START GAME!');
+
   const promptTurn = {
     allUsers: [],
     hasWent: [],
@@ -21,7 +23,7 @@ function startGame(socket, io) {
 
       // Validate we have enough users
 
-      if (users.length > 3) {
+      if (users.length > 2) {
 
         // Update promptTurn object
 
@@ -29,7 +31,7 @@ function startGame(socket, io) {
 
         // Update game state to prompt
 
-        Game.findOneAndUpdate({ gameID: gameID }, { allUsers: promptTurn.allUsers, gameState: GameStates.PROMPT, prompt: '' }, (err, game) => {
+        Game.findOneAndUpdate({ gameID: gameID }, { gameState: GameStates.PROMPT, prompt: '', $push: { allUsers: promptTurn.allUsers } }, (err, game) => {
           if (err) {
             socket.emit(Events.ERROR, err);
             return;
@@ -44,8 +46,9 @@ function startGame(socket, io) {
             }
 
             promptTurn.hasWent.push(promptMaster._id);
+            console.log('promptTurn', promptTurn);
 
-            // Assign all other users state of "waiting"
+            // Assign all users state of "waiting"
 
             User.updateMany({ gameID: gameID }, { state: UserStates.WAITING, response: ''}, (err, res) => {
               if (err) {
@@ -61,7 +64,7 @@ function startGame(socket, io) {
                   return;
                 }
 
-                Game.findOneAndUpdate({ gameID: gameID}, {hasWent: promptTurn.hasWent}, (err, res) => {
+                Game.findOneAndUpdate({ gameID: gameID}, { $push: { hasWent: promptTurn.hasWent } }, (err, res) => {
                   if (err) {
                     socket.emit(Events.ERROR, err);
                     return;

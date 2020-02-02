@@ -17,6 +17,7 @@ export default function Lobby() {
         console.log(gameInfo);
         dispatch(startRound(gameInfo.gameID));
     }
+    
 
     return (
       <div className='gameBoard'>

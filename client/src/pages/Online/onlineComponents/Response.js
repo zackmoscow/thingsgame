@@ -13,6 +13,8 @@ export default function Response() {
     
     const [responseInput, setResponseInput] = useState('');
 
+    console.log(userInfo);
+
     function handleResponseSubmit(e) {
         e.preventDefault();
         dispatch(submitResponse(gameInfo.gameID, userName, responseInput));
@@ -27,13 +29,8 @@ export default function Response() {
         switch (userInfo[userName].state) {
             case 'noResponse':
                 return (
-                    <div className='gameBoard'>
-                    <div className='headerArea'>
-                        <h1>Round: {gameInfo.round}</h1>
-                        <h2>PromptMaster: {gameInfo.promptMaster}</h2>
-                        <h2>Prompt: {gameInfo.prompt}</h2>
-                    </div>
                     <div className='responseArea'>
+                        <p>Please enter your response!</p>
                         <form onSubmit={(e) => { handleResponseSubmit(e) }}>
                             <fieldset>
                                 <input type='input' id='responseInput' value={responseInput} onChange={responseOnChange}/>
@@ -42,35 +39,29 @@ export default function Response() {
                             <button type='submit'>Submit Response</button>
                         </form>
                     </div>
-                    <div className='playerArea'>
-                        {getUsers()}
-                    </div>
-                </div>
                 )
             case 'responded':
                 return (
-                    <div className='gameBoard'>
-                        <div className='headerArea'>
-                            <h1>Round: {gameInfo.round}</h1>
-                            <h2>PromptMaster: {gameInfo.promptMaster}</h2>
-                            <h2>Prompt: {gameInfo.prompt}</h2>
-                        </div>
-                        <div className='responseArea'>
-                            <p>Waiting for all players to submit responses...</p>
-                        </div>
-                        <div className='playerArea'>
-                            {getUsers()}
-                        </div>
-                    </div>
+                    <div className='responseArea'>
+                        <p>Paused: waiting for all players to submit responses...</p>
+                    </div>   
                 )
             default:
-                return ((<p>Something bad happened with userInfo.state</p>))
+                return ((<p>Something bad happened with userInfo.state in response</p>))
         }
     }
 
     return (
-        <div>
-            {view()}
+        <div className='gameBoard'>
+        <div className='headerArea'>
+            <h1>Round: {gameInfo.round}</h1>
+            <h2>PromptMaster: {gameInfo.promptMaster}</h2>
+            <h2>Prompt: {gameInfo.prompt}</h2>
         </div>
+        {view()}
+        <div className='playerArea'>
+            {getUsers()}
+        </div>
+    </div>
     );
 }
