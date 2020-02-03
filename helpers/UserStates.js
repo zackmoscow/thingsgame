@@ -1,4 +1,5 @@
 exports.LOBBY = 'lobby';
+exports.LOBBY_PROMPT = 'lobbyPrompt';
 exports.PROMPT = 'prompt';
 exports.WAITING = 'waiting'
 exports.NO_RESPONSE = 'noResponse';

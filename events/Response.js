@@ -55,7 +55,7 @@ function submitResponse(socket, io) {
                     return;
                   }
 
-                  User.findOneAndUpdate({ gameID: gameID, prompMaster: true }, { state: UserStates.WAS_PROMPTMASTER }, (err, res) => {
+                  User.findOneAndUpdate({ gameID: gameID, promptMaster: true }, { state: UserStates.WAS_PROMPTMASTER }, (err, res) => {
                     if (err) {
                       socket.emit(Events.ERROR, err);
                       return;
@@ -65,6 +65,7 @@ function submitResponse(socket, io) {
 
                     Info.getUserInfo(gameID, (userInfo) => {
                       Info.getGameInfo(gameID, (gameInfo) => {
+                        console.log(userInfo);
                         io.to(gameID).emit(Events.UPDATE, gameInfo, userInfo);
                       });
                     });
