@@ -187,7 +187,8 @@ export default function OfflineGame() {
         } else {
             return (
                 <div className="scoreBoard">
-                    <ScoreBoard {...gameState} />
+                    <h1>The game is over!</h1>
+                    {scoreboard()}
                     <a href="/offlineGame">New Game</a>
                     <a href="/">Main Menu</a>
                 </div>
@@ -196,7 +197,19 @@ export default function OfflineGame() {
     }
     function scoreboard() {
         console.log('finished');
-        return <button onClick={()=>endRound()}>End Round</button>
+        const updatedGameState = { ...gameState };
+        const roundArray = updatedGameState.participants.sort((a,b) => (a.score > b.score) ? -1 : 1);
+        return (
+            <div className="scoreboard">
+                {roundArray.map(p=> (
+                    <div>
+                        <h3>{p.name}</h3>
+                        <p>{p.score}</p>
+                    </div>
+                ))}
+                <button onClick={()=>endRound()}>End Round</button>
+            </div>
+        )
     }
     function onDragOver(ev) {
         ev.preventDefault();
@@ -267,7 +280,6 @@ export default function OfflineGame() {
             playerClass = "player eliminated";
             dragEvents = {};
         }
-        console.log(o.avatar)
         return(
             <div className={playerClass} key={o.id} id={o.name} {...dragEvents}>
                 {/* <img src={o.avatar} alt={`${o.name}'s Avatar`} className="playerAvatar lvl1"/> */}
