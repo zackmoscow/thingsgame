@@ -4,7 +4,7 @@ import { setGameInfo, setUserInfo } from '../actions/actions'
 export let socket = null;
 
 export function connectToServer(dispatch) {
-  socket = io('localhost:3000', { reconnection: false });
+  socket = io('https://game-of-prompts.herokuapp.com/', { reconnection: false });
 
   socket.on('connect', () => {
     console.log('Socket connected');

@@ -20,10 +20,10 @@ function createGame(socket, io) {
     return gameID;
   }
 
-  function addUserToGame(userName, gameID, promptMaster, userAvatar) {
+  function addUserToGame(userName, gameID, state, promptMaster, userAvatar) {
     User.findOneAndUpdate({userName : userName}, {
       gameID: gameID, 
-      state: UserStates.LOBBY, 
+      state: state,
       promptMaster: promptMaster,
       currentScore: 0,
       gameWinner: false,
@@ -62,7 +62,7 @@ function createGame(socket, io) {
             return;
           }
 
-          addUserToGame(userName, gameID, true, userAvatar); 
+          addUserToGame(userName, gameID, 'lobbyPrompt', true, userAvatar); 
 
             socket.join(gameID);
 
@@ -106,7 +106,7 @@ function createGame(socket, io) {
           return;
         }
 
-        addUserToGame(userName, gameID, false, userAvatar);
+        addUserToGame(userName, gameID, 'prompt', false, userAvatar);
           
           socket.join(gameID);
 

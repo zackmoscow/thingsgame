@@ -38,7 +38,6 @@ function nextRound(socket, io) {
 
       // Create next promptmaster and update game to reflect that new promptmaster "hasWent"
         const allowedArray = allowed();
-        console.log('allowedArray', allowedArray);
 
         if (allowedArray.length > 0) {
 
