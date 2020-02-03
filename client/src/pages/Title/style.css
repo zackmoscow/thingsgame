@@ -20,7 +20,7 @@ button {
     max-height:0;
 }
 .open {
-    max-height: 700px;
+    max-height: 750px;
 }
 .open ~ .localGameBtn {
     opacity: .1;
@@ -57,7 +57,7 @@ button {
 #signout:focus {
     outline:none;
 }
-#loginSubmit, #signup, #offlineGameInit, #onlineLoginModal {
+#loginSubmit, #signup, #offlineGameInit, #onlineLoginModal, #createOnlineGame, #joinOnlineGame {
     background: #f76c6c;
     border: none;
     color: #000;
